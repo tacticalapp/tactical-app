@@ -1,11 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
+import TransportWebHID from "@ledgerhq/hw-transport-webhid";
 import "./App.css";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
+
+  useEffect(() => {
+    TransportWebHID.listen({
+      next: (e) => {
+        console.warn(e);
+      },
+      error: (e) => {
+        console.warn(e);
+      },
+      complete: () => {
+        // Ignore
+      }
+    });
+  }, []);
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
