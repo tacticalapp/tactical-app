@@ -1,12 +1,28 @@
 import { useState } from 'react';
 import reactLogo from './assets/react.svg';
-import './App.css';
 import { css } from '@linaria/core';
 import { View } from 'react-native';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import './App.css';
+
+// const router = createBrowserRouter(
+//   createRoutesFromElements(
+//     <Route path="/" element={<Root />}>
+//       <Route path="dashboard" element={<Dashboard />} />
+//       {/* ... etc. */}
+//     </Route>
+//   )
+// );
 
 const styles = css`
   background-color: blue;
 `;
+
 
 function App() {
   const [count, setCount] = useState(0)
