@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`derive should derive a key 1`] = `"A5Si7eMyyaE+uC6bJGMWBMMd+Xi04vD70sVJlE+deaU="`;
