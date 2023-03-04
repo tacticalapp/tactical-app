@@ -6,6 +6,8 @@ describe('opfr', () => {
     });
     it('should perform end-to-end', async () => {
 
+        // Source: https://github.com/multiparty/oprf/blob/39d1d75f5c0c218a779bf5381651a0799582cff6/test/oprf.spec.ts#L7
+
         // Client part
         let key = await o.createDerivedKey('hello-password');
         let masked = await o.createMaskedKey(key);
