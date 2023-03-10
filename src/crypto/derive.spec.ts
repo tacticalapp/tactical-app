@@ -4,13 +4,13 @@ describe('derive', () => {
         const authSecret = await derive({
             username: 'steve',
             secretKey: 'some-secret-key',
-            masterPassword: 'master-password',
+            password: 'master-password',
             usage: 'auth'
         });
         const encryptionSecret = await derive({
             username: 'steve',
             secretKey: 'some-secret-key',
-            masterPassword: 'master-password',
+            password: 'master-password',
             usage: 'encryption'
         });
         expect(authSecret.toString('hex')).toBe('73aa8d23ea10d59764c2bda7b78d1a86022ad1528cd110a9c1b74b0475f73bc4');

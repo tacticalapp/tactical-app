@@ -1,5 +1,5 @@
-import * as ed from "@noble/curves/ed25519";
+import * as ed from "@noble/ed25519";
 
-export function publicKeyFromSecret(privateKey: Buffer): Buffer {
-    return Buffer.from(ed.ed25519.getPublicKey(privateKey));
+export async function publicKeyFromSecret(privateKey: Buffer) {
+    return Buffer.from(await ed.getPublicKey(privateKey));
 }

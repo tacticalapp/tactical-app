@@ -11,7 +11,7 @@
   "dependencies": {
     "@linaria/core": "^4.2.8",
     "@linaria/react": "^4.3.6",
-    "@noble/curves": "^0.7.3",
+    "@noble/ed25519": "^1.7.3",
     "@noble/hashes": "^1.2.0",
     "@rollup/plugin-inject": "^5.0.3",
     "@types/react-native": "^0.71.3",

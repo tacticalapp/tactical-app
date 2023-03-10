@@ -3,6 +3,7 @@ import { TextInput, View } from 'react-native';
 import { TacticalClient } from '../../api/TacticalClient';
 import { Button } from '../../components/Button';
 import { useCommand } from '../../components/useCommand';
+import { decryptForKey } from '../../crypto/decryptForKey';
 import { derive } from '../../crypto/derive';
 import { generateSecretKey } from '../../crypto/generateSecretKey';
 import { publicKeyFromSecret } from '../../crypto/publicKeyFromSecret';
@@ -14,7 +15,7 @@ export function Signup() {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     let command = React.useCallback(async () => {
-        let client = new TacticalClient('https://tactical-server.herokuapp.com');
+        let client = new TacticalClient('https://tactical-server.herokuapp.com/');
 
         // Solving challenge
         console.warn('solving challenge...');
@@ -34,10 +35,14 @@ export function Signup() {
             secretKey,
             usage: 'auth'
         });
-        let authPublic = publicKeyFromSecret(authSecret);
+        let authPublic = await publicKeyFromSecret(authSecret);
         let packageData = Buffer.from('sample package');
-        let packageSignature = signPackage(packageData, authSecret);
-        await client.signup(authPublic, packageData, packageSignature, username, challenge.id);
+        let packageSignature = await signPackage(packageData, authSecret);
+        let encryptedToken = Buffer.from((await client.signup(authPublic, packageData, packageSignature, username, challenge.id)).token, 'base64');
+
+        // Decrypt token
+        let token = (await decryptForKey(authSecret, encryptedToken)).toString();
+        console.warn('token:' + token);
 
     }, [username, password]);
     let [executing, execute] = useCommand(command);
