@@ -2,20 +2,18 @@ import { derive } from './derive';
 describe('derive', () => {
     it('should derive a key', async () => {
         const authSecret = await derive({
-            accountId: 'steve',
-            accountSalt: Buffer.from('steve-salt'),
+            username: 'steve',
             secretKey: 'some-secret-key',
             masterPassword: 'master-password',
             usage: 'auth'
         });
         const encryptionSecret = await derive({
-            accountId: 'steve',
-            accountSalt: Buffer.from('steve-salt'),
+            username: 'steve',
             secretKey: 'some-secret-key',
             masterPassword: 'master-password',
             usage: 'encryption'
         });
-        expect(authSecret.toString('hex')).toBe('710b5516ab4d3629f5187ba4cc4929e7692e3b267ce5cc3142e75107783bffce');
-        expect(encryptionSecret.toString('hex')).toBe('c675b16c4bf1f869377d8317355a1ccc6b941cbf76a8bd350dde69694269398d');
+        expect(authSecret.toString('hex')).toBe('73aa8d23ea10d59764c2bda7b78d1a86022ad1528cd110a9c1b74b0475f73bc4');
+        expect(encryptionSecret.toString('hex')).toBe('6c927ce8cff920ac0c5453b06332e7d6f3c19f84cd0f9ef8e105447d4f390ba0');
     });
 });

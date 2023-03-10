@@ -18,7 +18,7 @@ const styleNormal = css`
     }
 `;
 
-export const Button = React.memo((props: { title: string, loading?:boolean, onClick: () => void }) => {
+export const Button = React.memo((props: { title: string, loading?: boolean, onClick: () => void }) => {
     return (
         <button className={styleNormal} onClick={props.onClick}>
             {props.title}
