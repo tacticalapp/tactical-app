@@ -2,8 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import linaria from '@linaria/vite';
 import inject from '@rollup/plugin-inject';
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 
 export default defineConfig({
   plugins: [
@@ -15,20 +13,11 @@ export default defineConfig({
       },
     })
   ],
-  define: {
-    global: 'window'
-  },
   optimizeDeps: {
     esbuildOptions: {
       mainFields: ['module', 'main'],
       resolveExtensions: ['.web.js', '.js', '.ts'],
-      plugins: [
-        NodeModulesPolyfillPlugin(),
-        NodeGlobalsPolyfillPlugin({
-          process: false,
-          buffer: true
-        })
-      ]
+      inject: ['./esbuild.inject.js']
     },
   },
   build: {
