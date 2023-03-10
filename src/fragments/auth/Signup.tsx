@@ -3,6 +3,10 @@ import { TextInput, View } from 'react-native';
 import { TacticalClient } from '../../api/TacticalClient';
 import { Button } from '../../components/Button';
 import { useCommand } from '../../components/useCommand';
+import { derive } from '../../crypto/derive';
+import { generateSecretKey } from '../../crypto/generateSecretKey';
+import { publicKeyFromSecret } from '../../crypto/publicKeyFromSecret';
+import { signPackage } from '../../crypto/signPackage';
 import { solveHashChallenge } from '../../utils/solveHashChallenge';
 
 export function Signup() {
@@ -19,12 +23,22 @@ export function Signup() {
             console.warn('challenge is not a hash');
             return;
         }
-        
-        // Calculation
-        let solved = await solveHashChallenge(challenge.params);
-        
-        console.warn(solved);
-        console.warn(username, password);
+        let solution = await solveHashChallenge(challenge.params);
+        await client.solve(challenge.id, solution);
+
+        // Creating account
+        let secretKey = generateSecretKey()
+        let authSecret = await derive({
+            username,
+            password: 'hello world!',
+            secretKey,
+            usage: 'auth'
+        });
+        let authPublic = publicKeyFromSecret(authSecret);
+        let packageData = Buffer.from('sample package');
+        let packageSignature = signPackage(packageData, authSecret);
+        await client.signup(authPublic, packageData, packageSignature, username, challenge.id);
+
     }, [username, password]);
     let [executing, execute] = useCommand(command);
 

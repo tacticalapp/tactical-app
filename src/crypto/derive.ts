@@ -5,12 +5,12 @@ import { pbkdf2 } from "./primitives/pbkdf2";
 export async function derive(args: {
     username: string,
     secretKey: string,
-    masterPassword: string,
+    password: string,
     usage: 'auth' | 'encryption'
 }) {
 
     // Derive password
-    const passwordNormalized = normalizePassword(args.masterPassword);
+    const passwordNormalized = normalizePassword(args.password);
     const passwordKey = await pbkdf2({ password: Buffer.from(passwordNormalized), salt: Buffer.from(args.username), iterations: 100000, bits: 256 });
 
     // Derive key

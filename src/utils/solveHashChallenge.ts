@@ -6,7 +6,7 @@ export async function solveHashChallenge(params: string) {
         let nonce = crypto.getRandomValues(new Uint8Array(32));
         let hash = await crypto.subtle.digest('SHA-256', Buffer.concat([nonce, salt]));
         if (Buffer.from(hash).compare(target) <= 0) {
-            return Buffer.concat([nonce, salt]).toString('base64');
+            return Buffer.from(nonce).toString('base64');
         }
     }
 }
