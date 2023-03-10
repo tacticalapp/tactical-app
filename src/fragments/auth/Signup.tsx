@@ -15,7 +15,7 @@ export function Signup() {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     let command = React.useCallback(async () => {
-        let client = new TacticalClient('https://tactical-server.herokuapp.com/');
+        let client = new TacticalClient('https://tactical-server.herokuapp.com');
 
         // Solving challenge
         console.warn('solving challenge...');
