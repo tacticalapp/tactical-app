@@ -5,7 +5,6 @@ import { Logo } from './assets/logo';
 import { Auth } from './auth/Auth';
 import { Unlock } from './auth/Unlock';
 import { Storage } from './storage/Storage';
-import { delay } from './utils/time';
 
 const SplashScreen = () => (
     <View style={{ flexGrow: 1, flexBasis: 0, alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center' }}>
@@ -15,7 +14,7 @@ const SplashScreen = () => (
 
 export const Boot = React.memo(() => {
 
-    let [state, setState] = React.useState<{ mode: 'loading' } | { mode: 'auth' } | { mode: 'unlock', storage: Storage } | { mode: 'app', storage: Storage }>({ mode: 'loading' });
+    let [state, setState] = React.useState<{ mode: 'loading' } | { mode: 'auth' } | { mode: 'unlock' } | { mode: 'app', storage: Storage }>({ mode: 'loading' });
     let onReady = React.useCallback((storage: Storage) => { setState({ mode: 'app', storage }); }, []);
     let onReset = React.useCallback(() => { setState({ mode: 'auth' }); }, []);
 
@@ -24,17 +23,17 @@ export const Boot = React.memo(() => {
         let exited = false;
         (async () => {
 
-            await delay(1000);
+            // TODO: Load all required fonts
 
-            // Load storage
-            let storage = await Storage.load();
+            // Check if storage exist
+            let storageExist = await Storage.exist();
 
             // Set storage
             if (!exited) {
-                if (!storage) {
+                if (!storageExist) {
                     setState({ mode: 'auth' });
                 } else {
-                    setState({ mode: 'unlock', storage });
+                    setState({ mode: 'unlock' });
                 }
             }
         })();
@@ -48,7 +47,7 @@ export const Boot = React.memo(() => {
     if (state.mode === 'auth') {
         content = <Auth onReady={onReady} />;
     } else if (state.mode === 'unlock') {
-        content = <Unlock storage={state.storage} onReady={onReady} />;
+        content = <Unlock onReady={onReady} />;
     } else if (state.mode === 'app') {
         content = <App storage={state.storage} onReset={onReset} />;
     } else {

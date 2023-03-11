@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextInput, View } from 'react-native';
-import { TacticalClient } from '../api/TacticalClient';
+import { client } from '../api/client';
 import { Button } from '../components/Button';
 import { useCommand } from '../components/useCommand';
 import { decryptForKey } from '../crypto/decryptForKey';
@@ -14,8 +14,8 @@ export function Signup() {
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [password2, setPassword2] = React.useState('');
     let command = React.useCallback(async () => {
-        let client = new TacticalClient('https://tactical-server.herokuapp.com');
 
         // Solving challenge
         console.warn('solving challenge...');
@@ -85,6 +85,25 @@ export function Signup() {
                 placeholder="Password"
                 value={password}
                 onChangeText={setPassword}
+                editable={!executing}
+            />
+            <TextInput
+                style={{
+                    width: 336,
+                    height: 46,
+                    paddingHorizontal: 12,
+                    paddingVertical: 6,
+                    borderWidth: 1,
+                    borderStyle: 'solid',
+                    borderColor: 'rgba(255, 255, 255, 0.6)',
+                    borderRadius: 4,
+                    marginBottom: 16
+                }}
+                secureTextEntry={true}
+                placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                placeholder="Re-type Password"
+                value={password2}
+                onChangeText={setPassword2}
                 editable={!executing}
             />
             <Button title="Create" onClick={execute} />

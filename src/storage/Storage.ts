@@ -1,23 +1,50 @@
 import localforage from "localforage";
+import { decryptForKey } from "../crypto/decryptForKey";
+import { encryptForKey } from "../crypto/encryptForKey";
+import { keyPairFromSecret } from "../crypto/keyPairFromSecret";
 
 export class Storage {
 
-    static async load(): Promise<Storage | null> {
-
-        // Load from localforage
-        let lf = await localforage.getItem<string>('tactical-key');
-        if (lf !== null) {
-
-        }
-
-        return null;
-        // const data = await browser.storage.local.get();
-        // return new Storage(data);
+    static async exist(): Promise<boolean> {
+        let res = await localforage.getItem<string>('tactical-key');
+        return res !== null;
     }
 
+    static async load(secret: Buffer): Promise<Storage | null> {
+
+        // Load from localforage and check if the secret is correct
+        let kp = await keyPairFromSecret(secret);
+        let tk = await localforage.getItem<string>('tactical-key');
+        let dk = await localforage.getItem<string>('tactical-data');
+        if (tk === null || dk === null) {
+            throw new Error('Storage not found');
+        }
+        if (!Buffer.from(tk, 'base64').equals(kp.publicKey)) {
+            return null;
+        }
+        let decrypted = JSON.parse((await decryptForKey(kp.secretKey, Buffer.from(dk, 'base64'))).toString());
+
+        // Create storage
+        return new Storage(kp.publicKey, decrypted);
+    }
+
+    static async create(secret: Buffer): Promise<Storage> {
+
+        // Configure storage
+        let kp = await keyPairFromSecret(secret);
+        await localforage.clear();
+        await localforage.setItem('tactical-key', kp.publicKey.toString('base64'));
+        await localforage.setItem('tactical-data', encryptForKey(kp.publicKey, Buffer.from('{}')));
+
+        // Create empty storage
+        return new Storage(kp.publicKey, {});
+    }
+
+    #publicKey: Buffer;
     #data: { [key: string]: string | number | boolean };
 
-    private constructor(data: { [key: string]: string | number | boolean }) {
+    private constructor(publicKey: Buffer, data: { [key: string]: string | number | boolean }) {
+        this.#publicKey = publicKey;
         this.#data = { ...data };
     }
 
@@ -40,6 +67,6 @@ export class Storage {
     }
 
     async #store() {
-        // TODO: Implement
+        await localforage.setItem('tactical-data', encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data))));
     }
 }
