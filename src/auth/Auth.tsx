@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Image, TextInput, View } from 'react-native';
 import { Text } from '../components/Themed';
-import logo from '../assets/logo.svg';
 import { motion } from 'framer-motion';
 import { css } from '@linaria/core';
 import { Button } from '../components/Button';
-import { Signup } from '../auth/Signup';
+import { Signup } from './Signup';
+import { Storage } from '../storage/Storage';
+import { Logo } from '../assets/logo';
 
 const container = css`
     display: flex;
@@ -17,7 +18,7 @@ const container = css`
     justify-content: center;
 `;
 
-export const Home = React.memo(() => {
+export const Auth = React.memo((props: { onReady: (storage: Storage) => void }) => {
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -35,7 +36,7 @@ export const Home = React.memo(() => {
             }}
         >
             <View style={{ width: 336, alignItems: 'center' }}>
-                <Image source={{ uri: logo }} style={{ width: 84, height: 84 }} />
+                <Logo width={84} height={84} />
                 <Text style={{ fontSize: 24, opacity: 0.8, fontWeight: '500', marginTop: 32 }}>Log in to Tactical</Text>
                 {mode === 'init' && (
                     <View style={{ height: 240, width: 336, justifyContent: 'center', alignItems: 'stretch', gap: 16 }}>

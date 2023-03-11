@@ -1,14 +1,15 @@
+import * as React from 'react';
 import { View } from "react-native";
 import {
   BrowserRouter,
   Route,
-  RouterProvider,
   Routes
 } from "react-router-dom";
 import { Home } from './fragments/Home';
 import { NotFound } from "./fragments/NotFound";
+import { Storage } from './storage/Storage';
 
-function App() {
+export const App = React.memo((props: { storage: Storage, onReset: () => void }) => {
   return (
     <View style={{ width: '100vw', height: '100vh', backgroundColor: '#111111', flexDirection: 'column' }}>
       <BrowserRouter>
@@ -19,6 +20,4 @@ function App() {
       </BrowserRouter>
     </View>
   );
-}
-
-export default App
+});

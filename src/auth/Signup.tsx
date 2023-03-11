@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { TextInput, View } from 'react-native';
-import { TacticalClient } from '../../api/TacticalClient';
-import { Button } from '../../components/Button';
-import { useCommand } from '../../components/useCommand';
-import { decryptForKey } from '../../crypto/decryptForKey';
-import { derive } from '../../crypto/derive';
-import { generateSecretKey } from '../../crypto/generateSecretKey';
-import { publicKeyFromSecret } from '../../crypto/publicKeyFromSecret';
-import { signPackage } from '../../crypto/signPackage';
-import { solveHashChallenge } from '../../utils/solveHashChallenge';
+import { TacticalClient } from '../api/TacticalClient';
+import { Button } from '../components/Button';
+import { useCommand } from '../components/useCommand';
+import { decryptForKey } from '../crypto/decryptForKey';
+import { derive } from '../crypto/derive';
+import { generateSecretKey } from '../crypto/generateSecretKey';
+import { publicKeyFromSecret } from '../crypto/publicKeyFromSecret';
+import { signPackage } from '../crypto/signPackage';
+import { solveHashChallenge } from '../utils/solveHashChallenge';
 
 export function Signup() {
 
