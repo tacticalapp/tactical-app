@@ -30,7 +30,7 @@ export const Auth = React.memo((props: { onReady: (storage: Storage) => void }) 
     const [mode, setMode] = React.useState<'init' | 'signup' | 'login'>('init');
     return (
         <View style={{ flexGrow: 1, justifyContent: 'center', flexDirection: 'column' }}>
-            <View style={{ width: 336, height: 480, alignSelf: 'center', alignItems: 'center' }}>
+            <View style={{ width: 336, height: 580, alignSelf: 'center', alignItems: 'center' }}>
                 <Page active={mode === 'login'}>
                     <Login />
                 </Page>
