@@ -20,6 +20,8 @@ import { encryptForKey } from '../crypto/encryptForKey';
 import { randomBytes } from '../crypto/randomBytes';
 import { deriveStorage } from '../crypto/deriveStorage';
 import { Storage } from '../storage/Storage';
+import { useStack } from '../components/Stack';
+import { Backup } from './Backup';
 
 export const Signup = React.memo((props: { onCancel: () => void, onReady: (storage: Storage) => void }) => {
 
@@ -31,6 +33,7 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (stora
     const password2Controls = useAnimationControls();
     const [password2, setPassword2] = React.useState('');
     const [error, setError] = React.useState<{ kind: 'username' | 'password', message: string } | null>(null);
+    const stack = useStack();
 
     let command = React.useCallback(async () => {
 
@@ -175,8 +178,8 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (stora
         storage.set('account:secret-key', secretKey);
         storage.set('account:token', signupData.token);
         storage.set('account:secret', signupData.accountSecret.toString('base64'));
-        props.onReady(storage);
-        
+        stack.push(<Backup storage={storage} onReady={props.onReady} />);
+
     }, [username, password, password2]);
     let [executing, execute] = useCommand(command);
 

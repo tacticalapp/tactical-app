@@ -28,10 +28,18 @@ const styleGhost = css`
     }
 `;
 
-export const Button = React.memo((props: { kind?: 'normal' | 'ghost', title: string, loading?: boolean, onClick: () => void }) => {
+const styleGreen = css`
+    
+    background-color: #cef4a9;
+    &:hover {
+        background-color: #abd087;
+    }
+`;
+
+export const Button = React.memo((props: { kind?: 'normal' | 'ghost' | 'green', title: string, loading?: boolean, onClick: () => void }) => {
     let kind = props.kind || 'normal';
     return (
-        <button className={cx(styleNormal, kind === 'ghost' && styleGhost)} onClick={props.onClick}>
+        <button className={cx(styleNormal, kind === 'ghost' && styleGhost, kind === 'green' && styleGreen)} onClick={props.onClick}>
             {props.title}
         </button>
     );

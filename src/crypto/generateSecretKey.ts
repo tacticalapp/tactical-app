@@ -1,4 +1,4 @@
-const KEY_SECTIONS = 6;
+const KEY_SECTIONS = 5;
 const KEY_SECTION_LENGTH = 5;
 const characters = [
     '1', '2', '3', '4', '5', '6', '7', '8', '9', // 2-9
@@ -14,7 +14,7 @@ export function generateSecretKey() {
     for (let i = 0; i < KEY_SECTIONS; i++) {
         let s = '';
         for (let j = 0; j < KEY_SECTION_LENGTH; j++) {
-            s += characters[(tmp[0] & 31)]; // total number of characters is 32
+            s += characters[(tmp[j + i * KEY_SECTION_LENGTH] & 31)]; // total number of characters is 32
         }
         res.push(s);
     }

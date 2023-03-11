@@ -40,9 +40,9 @@ export class Storage {
 
         // Configure storage
         let kp = await keyPairFromSecret(secret);
-        await instance.clear();
-        await instance.setItem('tactical-key', kp.publicKey.toString('base64'));
-        await instance.setItem('tactical-data', (await encryptForKey(kp.publicKey, Buffer.from('{}'))).toString('base64'));
+        // await instance.clear();
+        // await instance.setItem('tactical-key', kp.publicKey.toString('base64'));
+        // await instance.setItem('tactical-data', (await encryptForKey(kp.publicKey, Buffer.from('{}'))).toString('base64'));
 
         // Create empty storage
         return new Storage(kp.publicKey, {});
@@ -72,6 +72,12 @@ export class Storage {
         } else {
             return null;
         }
+    }
+
+    async commit() {
+        await instance.clear();
+        await instance.setItem('tactical-key', this.#publicKey.toString('base64'));
+        await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
     }
 
     async #store() {
