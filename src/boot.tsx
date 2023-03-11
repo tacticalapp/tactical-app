@@ -5,10 +5,11 @@ import { Logo } from './assets/logo';
 import { Auth } from './auth/Auth';
 import { Unlock } from './auth/Unlock';
 import { Storage } from './storage/Storage';
+import { delay } from './utils/time';
 
 const SplashScreen = () => (
     <View style={{ flexGrow: 1, flexBasis: 0, alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center' }}>
-        <Logo width={84} height={84} />
+        <Logo width={145} height={38} />
     </View>
 );
 
@@ -24,6 +25,7 @@ export const Boot = React.memo(() => {
         (async () => {
 
             // TODO: Load all required fonts
+            await delay(1000);
 
             // Check if storage exist
             let storageExist = await Storage.exist();

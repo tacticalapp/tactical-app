@@ -2,20 +2,36 @@ import * as React from 'react';
 import { TextInput, View } from 'react-native';
 import { client } from '../api/client';
 import { Button } from '../components/Button';
+import { Text } from '../components/Themed';
 import { useCommand } from '../components/useCommand';
 import { decryptForKey } from '../crypto/decryptForKey';
 import { derive } from '../crypto/derive';
 import { generateSecretKey } from '../crypto/generateSecretKey';
+import { normalizePassword } from '../crypto/primitives/normalizePassword';
 import { publicKeyFromSecret } from '../crypto/publicKeyFromSecret';
 import { signPackage } from '../crypto/signPackage';
+import { checkUsername } from '../utils/checkUsername';
 import { solveHashChallenge } from '../utils/solveHashChallenge';
 
-export function Signup() {
+export const Signup = React.memo((props: { onCancel: () => void }) => {
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [password2, setPassword2] = React.useState('');
+
     let command = React.useCallback(async () => {
+
+        if (!checkUsername(username)) {
+            return;
+        }
+
+        if (normalizePassword(password).length < 8) {
+            return;
+        }
+
+        if (password !== password2) {
+            return;
+        }
 
         // Solving challenge
         console.warn('solving challenge...');
@@ -28,7 +44,7 @@ export function Signup() {
         await client.solve(challenge.id, solution);
 
         // Creating account
-        let secretKey = generateSecretKey()
+        let secretKey = generateSecretKey();
         let authSecret = await derive({
             username,
             password: 'hello world!',
@@ -48,7 +64,16 @@ export function Signup() {
     let [executing, execute] = useCommand(command);
 
     return (
-        <View style={{ height: 240, width: 336, justifyContent: 'center', alignItems: 'stretch' }}>
+        <View style={{ flexGrow: 1, width: 336, justifyContent: 'center', alignItems: 'stretch' }}>
+            <Text style={{ fontSize: 18, opacity: 0.8, fontWeight: '400', marginTop: 16, textAlign: 'center', marginBottom: 16 }}>
+                Create a new account in Tactical
+            </Text>
+            <Text style={{ fontSize: 18, marginBottom: 4, textAlign: 'center' }}>
+                ⚡️ Username
+            </Text>
+            <Text style={{ fontSize: 14, opacity: 0.8, marginBottom: 16, textAlign: 'center' }}>
+                Used to find you and <Text style={{ fontWeight: '800' }}>can't</Text> be changed.
+            </Text>
             <TextInput
                 style={{
                     width: 336,
@@ -59,7 +84,8 @@ export function Signup() {
                     borderStyle: 'solid',
                     borderColor: 'rgba(255, 255, 255, 0.6)',
                     borderRadius: 4,
-                    marginBottom: 16
+                    marginBottom: 16,
+                    flexShrink: 0
                 }}
                 keyboardType="email-address"
                 placeholderTextColor="rgba(255, 255, 255, 0.6)"
@@ -68,6 +94,13 @@ export function Signup() {
                 onChangeText={setUsername}
                 editable={!executing}
             />
+
+            <Text style={{ fontSize: 18, marginBottom: 4, marginTop: 16, textAlign: 'center' }}>
+                ✍️ Password<br />
+            </Text>
+            <Text style={{ fontSize: 14, opacity: 0.8, marginBottom: 16, textAlign: 'center' }}>
+                This password <Text style={{ fontWeight: '800' }}>can't</Text> be recovered or reset.
+            </Text>
             <TextInput
                 style={{
                     width: 336,
@@ -78,7 +111,8 @@ export function Signup() {
                     borderStyle: 'solid',
                     borderColor: 'rgba(255, 255, 255, 0.6)',
                     borderRadius: 4,
-                    marginBottom: 16
+                    marginBottom: 16,
+                    flexShrink: 0
                 }}
                 secureTextEntry={true}
                 placeholderTextColor="rgba(255, 255, 255, 0.6)"
@@ -97,7 +131,8 @@ export function Signup() {
                     borderStyle: 'solid',
                     borderColor: 'rgba(255, 255, 255, 0.6)',
                     borderRadius: 4,
-                    marginBottom: 16
+                    marginBottom: 48,
+                    flexShrink: 0
                 }}
                 secureTextEntry={true}
                 placeholderTextColor="rgba(255, 255, 255, 0.6)"
@@ -107,6 +142,8 @@ export function Signup() {
                 editable={!executing}
             />
             <Button title="Create" onClick={execute} />
+            <View style={{ height: 8 }} />
+            <Button title="Back" kind="ghost" onClick={props.onCancel} />
         </View>
     );
-}
+});

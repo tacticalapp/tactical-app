@@ -1,8 +1,8 @@
-import { css } from '@linaria/core';
+import { css, cx } from '@linaria/core';
 import * as React from 'react';
 
 const styleNormal = css`
-    border-radius: 4px;
+    border-radius: 8px;
     border: 1px solid transparent;
     padding: 0.6em 1.2em;
     font-size: 1em;
@@ -18,9 +18,20 @@ const styleNormal = css`
     }
 `;
 
-export const Button = React.memo((props: { title: string, loading?: boolean, onClick: () => void }) => {
+const styleGhost = css`
+    border: 0px;
+    background-color: transparent;
+    color: #dedddd;
+    &:hover {
+        color: #fff;
+        background-color: transparent;
+    }
+`;
+
+export const Button = React.memo((props: { kind?: 'normal' | 'ghost', title: string, loading?: boolean, onClick: () => void }) => {
+    let kind = props.kind || 'normal';
     return (
-        <button className={styleNormal} onClick={props.onClick}>
+        <button className={cx(styleNormal, kind === 'ghost' && styleGhost)} onClick={props.onClick}>
             {props.title}
         </button>
     );
