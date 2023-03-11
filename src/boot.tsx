@@ -49,7 +49,7 @@ export const Boot = React.memo(() => {
     if (state.mode === 'auth') {
         content = <Auth onReady={onReady} />;
     } else if (state.mode === 'unlock') {
-        content = <Unlock onReady={onReady} />;
+        content = <Unlock onReady={onReady} onReset={onReset} />;
     } else if (state.mode === 'app') {
         content = <App storage={state.storage} onReset={onReset} />;
     } else {

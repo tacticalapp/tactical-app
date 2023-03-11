@@ -1,6 +1,6 @@
 import { useAnimationControls } from 'framer-motion';
 import * as React from 'react';
-import { Alert, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
 import { motion } from 'framer-motion';
 import { client } from '../api/client';
 import { Button } from '../components/Button';
@@ -21,7 +21,7 @@ import { randomBytes } from '../crypto/randomBytes';
 import { deriveStorage } from '../crypto/deriveStorage';
 import { Storage } from '../storage/Storage';
 
-export const Signup = React.memo((props: { onCancel: () => void }) => {
+export const Signup = React.memo((props: { onCancel: () => void, onReady: (storage: Storage) => void }) => {
 
     const secretKey = React.useMemo(() => generateSecretKey(), []);
     const usernameControls = useAnimationControls();
@@ -170,10 +170,13 @@ export const Signup = React.memo((props: { onCancel: () => void }) => {
         // Create a storage
         //
 
-        console.warn('token:' + signupData.token);
-        console.warn('secret:' + signupData.accountSecret.toString('base64'));
-        let storage = await Storage.create(accountSecret);
-
+        let storage = await Storage.create(storageSecret);
+        storage.set('account:username', username);
+        storage.set('account:secret-key', secretKey);
+        storage.set('account:token', signupData.token);
+        storage.set('account:secret', signupData.accountSecret.toString('base64'));
+        props.onReady(storage);
+        
     }, [username, password, password2]);
     let [executing, execute] = useCommand(command);
 

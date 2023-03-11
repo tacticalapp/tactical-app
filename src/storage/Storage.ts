@@ -3,10 +3,18 @@ import { decryptForKey } from "../crypto/decryptForKey";
 import { encryptForKey } from "../crypto/encryptForKey";
 import { keyPairFromSecret } from "../crypto/keyPairFromSecret";
 
+const instance = localforage.createInstance({
+    name: 'tactical'
+});
+
 export class Storage {
 
+    static async reset() {
+        await instance.clear();
+    }
+
     static async exist(): Promise<boolean> {
-        let res = await localforage.getItem<string>('tactical-key');
+        let res = await instance.getItem<string>('tactical-key');
         return res !== null;
     }
 
@@ -14,8 +22,8 @@ export class Storage {
 
         // Load from localforage and check if the secret is correct
         let kp = await keyPairFromSecret(secret);
-        let tk = await localforage.getItem<string>('tactical-key');
-        let dk = await localforage.getItem<string>('tactical-data');
+        let tk = await instance.getItem<string>('tactical-key');
+        let dk = await instance.getItem<string>('tactical-data');
         if (tk === null || dk === null) {
             throw new Error('Storage not found');
         }
@@ -32,9 +40,9 @@ export class Storage {
 
         // Configure storage
         let kp = await keyPairFromSecret(secret);
-        await localforage.clear();
-        await localforage.setItem('tactical-key', kp.publicKey.toString('base64'));
-        await localforage.setItem('tactical-data', encryptForKey(kp.publicKey, Buffer.from('{}')));
+        await instance.clear();
+        await instance.setItem('tactical-key', kp.publicKey.toString('base64'));
+        await instance.setItem('tactical-data', (await encryptForKey(kp.publicKey, Buffer.from('{}'))).toString('base64'));
 
         // Create empty storage
         return new Storage(kp.publicKey, {});
@@ -48,16 +56,16 @@ export class Storage {
         this.#data = { ...data };
     }
 
-    async set(key: string, value: string | number | boolean | null) {
+    set(key: string, value: string | number | boolean | null) {
         if (value === null) {
             delete this.#data[key];
         } else {
             this.#data[key] = value;
         }
-        await this.#store();
+        this.#store();
     }
 
-    async get(key: string) {
+    get(key: string) {
         let r = this.#data[key];
         if (r !== undefined) {
             return r;
@@ -67,6 +75,6 @@ export class Storage {
     }
 
     async #store() {
-        await localforage.setItem('tactical-data', encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data))));
+        await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
     }
 }

@@ -35,7 +35,7 @@ export const Auth = React.memo((props: { onReady: (storage: Storage) => void }) 
                     <Login />
                 </Page>
                 <Page active={mode === 'signup'}>
-                    <Signup onCancel={() => setMode('init')} />
+                    <Signup onCancel={() => setMode('init')} onReady={props.onReady} />
                 </Page>
                 <Page active={mode === 'init'}>
                     <View style={{ alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch' }}>
