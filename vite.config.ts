@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react';
 import linaria from '@linaria/vite';
 import inject from '@rollup/plugin-inject';
 import wasm from "vite-plugin-wasm";
-import topLevelAwait from "vite-plugin-top-level-await";
 
 export default defineConfig({
   plugins: [
@@ -14,7 +13,7 @@ export default defineConfig({
         presets: ['@babel/preset-typescript', '@babel/preset-react'],
       },
     }),
-    topLevelAwait(),
+    // topLevelAwait(),
     wasm()
   ],
   optimizeDeps: {
