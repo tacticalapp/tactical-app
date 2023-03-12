@@ -4,6 +4,7 @@ import { App } from './App';
 import { Logo } from './assets/logo';
 import { Auth } from './auth/Auth';
 import { Unlock } from './auth/Unlock';
+import { deriveStorage } from './crypto/deriveStorage';
 import { Storage } from './storage/Storage';
 import { delay } from './utils/time';
 
@@ -31,13 +32,30 @@ export const Boot = React.memo(() => {
             let storageExist = await Storage.exist();
 
             // Set storage
-            if (!exited) {
-                if (!storageExist) {
+
+            if (!storageExist) {
+                if (!exited) {
                     setState({ mode: 'auth' });
-                } else {
+                }
+            } else {
+                if (import.meta.env.DEV) {
+                    let pass = localStorage.getItem('__dev__password__');
+                    if (pass) {
+                        let loaded = await Storage.load(await deriveStorage(pass));
+                        if (loaded) {
+                            if (!exited) {
+                                setState({ mode: 'app', storage: loaded });
+                            }
+                            return;
+                        }
+                    }
+                }
+
+                if (!exited) {
                     setState({ mode: 'unlock' });
                 }
             }
+
         })();
         return () => {
             exited = true;

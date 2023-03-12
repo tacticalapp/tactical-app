@@ -169,6 +169,14 @@ export const Login = React.memo((props: { onCancel: () => void, onReady: (storag
         await storage.commit();
 
         //
+        // Simplify development
+        //
+
+        if (import.meta.env.DEV) {
+            localStorage.setItem('__dev__password__', normalizedPassword);
+        }
+
+        //
         // Done
         //
 

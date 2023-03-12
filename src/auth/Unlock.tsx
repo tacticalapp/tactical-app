@@ -22,11 +22,21 @@ export const Unlock = React.memo((props: { onReady: (storage: Storage) => void, 
     }, [props.onReset]);
     const [resetting, resetCommand] = useCommand(doReset);
     const doUnlock = React.useCallback(async () => {
+
+        //
+        // Normalize
+        //
+
         let normalizedPasssword = normalizePassword(password);
         if (normalizedPasssword.length < 8) {
             shake(passwordControls);
             return;
         }
+
+        //
+        // Unlock
+        //
+
         let storage = await minDelay(500, async () => {
             let derived = await deriveStorage(normalizedPasssword);
             return await Storage.load(derived);
@@ -35,7 +45,21 @@ export const Unlock = React.memo((props: { onReady: (storage: Storage) => void, 
             shake(passwordControls);
             return;
         }
+
+        //
+        // Simplify development
+        //
+
+        if (import.meta.env.DEV) {
+            localStorage.setItem('__dev__password__', normalizedPasssword);
+        }
+
+        //
+        // Done
+        //
+
         props.onReady(storage);
+
     }, [props.onReady, password]);
     const [unlocking, unlockCommand] = useCommand(doUnlock);
 

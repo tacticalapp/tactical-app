@@ -7,7 +7,7 @@ import { createEmergencyKit } from './createEmergencyKit';
 import { Button } from '../components/Button';
 import { useCommand } from '../components/useCommand';
 
-export const Backup = React.memo((props: { storage: Storage, onReady: (storage: Storage) => void }) => {
+export const Backup = React.memo((props: { storage: Storage, password: string, onReady: (storage: Storage) => void }) => {
 
     const secretKey = React.useMemo(() => props.storage.get('account:secret-key') as string, []);
     const username = React.useMemo(() => props.storage.get('account:username') as string, []);
@@ -45,6 +45,14 @@ export const Backup = React.memo((props: { storage: Storage, onReady: (storage: 
 
         // Commit storage
         await props.storage.commit();
+
+        //
+        // Simplify development
+        //
+
+        if (import.meta.env.DEV) {
+            localStorage.setItem('__dev__password__', props.password);
+        }
 
         // Done
         props.onReady(props.storage);

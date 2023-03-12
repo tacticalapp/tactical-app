@@ -204,7 +204,7 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (stora
         // Done
         // 
 
-        stack.push(<Backup storage={storage} onReady={props.onReady} />);
+        stack.push(<Backup storage={storage} password={normalizedPassword} onReady={props.onReady} />);
 
     }, [username, password, password2]);
     let [executing, execute] = useCommand(command);
