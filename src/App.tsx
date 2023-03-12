@@ -16,8 +16,7 @@ export const App = React.memo((props: { storage: Storage, onReset: () => void })
       <View style={{ width: '100vw', height: '100vh', backgroundColor: '#111111', flexDirection: 'column' }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<Home />} />
           </Routes>
         </BrowserRouter>
       </View>
