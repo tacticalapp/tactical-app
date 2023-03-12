@@ -10,7 +10,6 @@ describe('computeSharedSecret', () => {
         let publicB = Buffer.from(await ed.getPublicKey(secretB));
         let sharedA = await computeSharedSecret({ publicKey: publicB, secretKey: secretA });
         let sharedB = await computeSharedSecret({ publicKey: publicA, secretKey: secretB });
-        console.warn(sharedA);
-        console.warn(sharedB);
+        expect(sharedA.equals(sharedB)).toBe(true);
     });
 });

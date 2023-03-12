@@ -9,7 +9,7 @@ import { useCommand } from '../components/useCommand';
 import { decryptForKey } from '../crypto/decryptForKey';
 import { derive } from '../crypto/derive';
 import { generateSecretKey } from '../crypto/generateSecretKey';
-import { normalizePassword } from '../crypto/primitives/normalizePassword';
+import { normalizePassword } from '../crypto/normalizePassword';
 import { publicKeyFromSecret } from '../crypto/publicKeyFromSecret';
 import { signPackage } from '../crypto/signPackage';
 import { checkUsername } from '../utils/checkUsername';
@@ -22,6 +22,8 @@ import { deriveStorage } from '../crypto/deriveStorage';
 import { Storage } from '../storage/Storage';
 import { useStack } from '../components/Stack';
 import { Backup } from './Backup';
+import { normalizeUsername } from '../crypto/normalizeUsername';
+import { normalizeSecretKey } from '../crypto/normalizeSecretKey';
 
 export const Signup = React.memo((props: { onCancel: () => void, onReady: (storage: Storage) => void }) => {
 
@@ -44,22 +46,31 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (stora
         setError(null);
 
         //
+        // Normalize
+        //
+
+        const normalizedPassword = normalizePassword(password);
+        const normalizedPassword2 = normalizePassword(password);
+        const normalizedUsername = normalizeUsername(username);
+        const normalizedSecretKey = normalizeSecretKey(secretKey);
+
+        //
         // Client checks
         //
 
-        if (!checkUsername(username)) {
+        if (!checkUsername(normalizedUsername)) {
             shake(usernameControls);
             setError({ kind: 'username', message: 'Invalid username' });
             return;
         }
 
-        if (normalizePassword(password).length < 8) {
+        if (normalizedPassword.length < 8) {
             shake(passwordControls);
             setError({ kind: 'password', message: 'Password must be at least 8 characters' });
             return;
         }
 
-        if (password !== password2) {
+        if (normalizedPassword !== normalizedPassword2) {
             shake(password2Controls);
             setError({ kind: 'password', message: 'Passwords do not match' });
             return;
@@ -70,7 +81,7 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (stora
         //
 
         let usernameStatus = await backoff(async () => {
-            return await client.checkUsername(username);
+            return await client.checkUsername(normalizedUsername);
         });
         // NOTE: We are ignoring available flag since it is 
         //       implicitly checked by the signup request later
@@ -84,11 +95,21 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (stora
         // Derive Keys
         //
 
-        let authSecret = await derive({ username, password, secretKey, usage: 'auth' });
+        let authSecret = await derive({
+            username: normalizedUsername,
+            password: normalizedPassword,
+            secretKey: normalizedSecretKey,
+            usage: 'auth'
+        });
         let authPublic = await publicKeyFromSecret(authSecret);
-        let encryptSecret = await derive({ username, password, secretKey, usage: 'encryption' });
+        let encryptSecret = await derive({
+            username: normalizedUsername,
+            password: normalizedPassword,
+            secretKey: normalizedSecretKey,
+            usage: 'encryption'
+        });
         let encryptPublic = await publicKeyFromSecret(encryptSecret);
-        let storageSecret = await deriveStorage(password);
+        let storageSecret = await deriveStorage(normalizedPassword);
 
         //
         // Create account secret
@@ -132,7 +153,7 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (stora
             // Perform signup
             //
 
-            let res = await client.signup(authPublic, packageData, packageSignature, username, challenge.id, signedChallenge);
+            let res = await backoff(() => client.signup(authPublic, packageData, packageSignature, normalizedUsername, challenge.id, signedChallenge));
             if (!res.ok) {
                 if (res.error === 'invalid_challenge') {
                     throw Error('Invalid challenge'); // Try again
@@ -149,7 +170,7 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (stora
             // Decrypt and verify response
             //
 
-            let token = (await decryptForKey(authSecret, Buffer.from(res.response.token, 'base64'))).toString();
+            let token = (await decryptForKey(authSecret, Buffer.from(res.response.token, 'base64'))).toString('base64');
             let pkg = await decryptForKey(encryptSecret, Buffer.from(res.response.package, 'base64'));
             if (pkg[0] !== 0) {
                 throw Error('Invalid package version');
@@ -174,10 +195,15 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (stora
         //
 
         let storage = await Storage.create(storageSecret);
-        storage.set('account:username', username);
-        storage.set('account:secret-key', secretKey);
+        storage.set('account:username', normalizedUsername);
+        storage.set('account:secret-key', normalizedSecretKey);
         storage.set('account:token', signupData.token);
         storage.set('account:secret', signupData.accountSecret.toString('base64'));
+
+        //
+        // Done
+        // 
+
         stack.push(<Backup storage={storage} onReady={props.onReady} />);
 
     }, [username, password, password2]);
@@ -275,7 +301,7 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (stora
                 {(error && error.kind === 'password') ? ('⚠️ ' + error.message) : ''}
             </Text>
             <View style={{ height: 24 }} />
-            <Button title="Create" onClick={execute} />
+            <Button title="Create" loading={executing} onClick={execute} />
             <View style={{ height: 8 }} />
             <Button title="Back" kind="ghost" onClick={props.onCancel} />
         </View>

@@ -33,26 +33,21 @@ export class Storage {
         let decrypted = JSON.parse((await decryptForKey(kp.secretKey, Buffer.from(dk, 'base64'))).toString());
 
         // Create storage
-        return new Storage(kp.publicKey, decrypted);
+        return new Storage(kp.publicKey, decrypted, true);
     }
 
     static async create(secret: Buffer): Promise<Storage> {
-
-        // Configure storage
         let kp = await keyPairFromSecret(secret);
-        // await instance.clear();
-        // await instance.setItem('tactical-key', kp.publicKey.toString('base64'));
-        // await instance.setItem('tactical-data', (await encryptForKey(kp.publicKey, Buffer.from('{}'))).toString('base64'));
-
-        // Create empty storage
-        return new Storage(kp.publicKey, {});
+        return new Storage(kp.publicKey, {}, false);
     }
 
     #publicKey: Buffer;
     #data: { [key: string]: string | number | boolean };
+    #commited: boolean;
 
-    private constructor(publicKey: Buffer, data: { [key: string]: string | number | boolean }) {
+    private constructor(publicKey: Buffer, data: { [key: string]: string | number | boolean }, commited: boolean) {
         this.#publicKey = publicKey;
+        this.#commited = commited;
         this.#data = { ...data };
     }
 
@@ -78,9 +73,12 @@ export class Storage {
         await instance.clear();
         await instance.setItem('tactical-key', this.#publicKey.toString('base64'));
         await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
+        this.#commited = true;
     }
 
     async #store() {
-        await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
+        if (this.#commited) {
+            await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
+        }
     }
 }

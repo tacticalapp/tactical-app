@@ -9,6 +9,8 @@ import { Button } from '../components/Button';
 import { useCommand } from '../components/useCommand';
 import { deriveStorage } from '../crypto/deriveStorage';
 import { shake } from '../utils/shake';
+import { minDelay } from '../utils/time';
+import { normalizePassword } from '../crypto/normalizePassword';
 
 export const Unlock = React.memo((props: { onReady: (storage: Storage) => void, onReset: () => void }) => {
 
@@ -20,8 +22,15 @@ export const Unlock = React.memo((props: { onReady: (storage: Storage) => void, 
     }, [props.onReset]);
     const [resetting, resetCommand] = useCommand(doReset);
     const doUnlock = React.useCallback(async () => {
-        let derived = await deriveStorage(password);
-        let storage = await Storage.load(derived);
+        let normalizedPasssword = normalizePassword(password);
+        if (normalizedPasssword.length < 8) {
+            shake(passwordControls);
+            return;
+        }
+        let storage = await minDelay(500, async () => {
+            let derived = await deriveStorage(normalizedPasssword);
+            return await Storage.load(derived);
+        });
         if (!storage) {
             shake(passwordControls);
             return;
@@ -70,7 +79,7 @@ export const Unlock = React.memo((props: { onReady: (storage: Storage) => void, 
                                 blurOnSubmit={false}
                             />
                         </motion.div>
-                        <Button title="Unlock" onClick={unlockCommand} />
+                        <Button title="Unlock" loading={unlocking} onClick={unlockCommand} />
                         <Button kind="ghost" title="Log out" onClick={resetCommand} />
                     </View>
                 </motion.div>

@@ -39,3 +39,13 @@ export function createBackoff(
 }
 
 export let backoff = createBackoff({ onError: (e) => { console.warn(e); } });
+
+export async function minDelay<T>(ms: number, execute: () => Promise<T>) {
+    let start = Date.now();
+    let result = await execute();
+    let elapsed = Math.min(Math.max(Date.now() - start, 0), ms); // Protect from time drift
+    if (elapsed < ms) {
+        await delay(ms - elapsed);
+    }
+    return result;
+}

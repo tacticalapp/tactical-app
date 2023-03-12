@@ -42,7 +42,12 @@ export const Backup = React.memo((props: { storage: Storage, onReady: (storage: 
 
     }, [emergencyKit]);
     const doComplete = React.useCallback(async () => {
-        // TODO: Implement
+
+        // Commit storage
+        await props.storage.commit();
+
+        // Done
+        props.onReady(props.storage);
     }, []);
     const [executing, executingAction] = useCommand(doComplete);
 
@@ -88,7 +93,7 @@ export const Backup = React.memo((props: { storage: Storage, onReady: (storage: 
             </View>
 
             <View style={{ height: 48, marginTop: 24, width: 300, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }}>
-                <Button title="Complete account creation" kind={'normal'} onClick={doComplete} />
+                <Button title="Complete account creation" kind={'normal'} loading={executing} onClick={executingAction} />
             </View>
         </View>
     );
