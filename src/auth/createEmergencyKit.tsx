@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 export async function createEmergencyKit(args: { username: string, secretKey: string }) {
 
     // Dynamic import

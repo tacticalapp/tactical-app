@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { Text } from '../components/Themed';
+import { Text } from '../ui/components/Themed';
 import { Storage } from '../storage/Storage';
 import Balancer from 'react-wrap-balancer';
 import { createEmergencyKit } from './createEmergencyKit';
-import { Button } from '../components/Button';
-import { useCommand } from '../components/useCommand';
+import { Button } from '../ui/components/Button';
+import { useCommand } from '../ui/components/useCommand';
 
 export const Backup = React.memo((props: { storage: Storage, password: string, onReady: (storage: Storage) => void }) => {
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { App } from './App';
+import { App } from './ui/App';
 import { Logo } from './assets/logo';
 import { Auth } from './auth/Auth';
 import { Unlock } from './auth/Unlock';

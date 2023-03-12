@@ -1,7 +1,7 @@
 import { css } from '@linaria/core';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as React from 'react';
-import { randomKey } from '../utils/randomKey';
+import { randomKey } from '../../utils/randomKey';
 
 const StackContext = React.createContext<{ pop: () => void, push: (node: React.ReactNode) => void } | null>(null);
 

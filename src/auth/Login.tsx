@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { TextInput, View } from 'react-native';
-import { Button } from '../components/Button';
-import { Text } from '../components/Themed';
+import { Button } from '../ui/components/Button';
+import { Text } from '../ui/components/Themed';
 import Balancer from 'react-wrap-balancer';
-import { useCommand } from '../components/useCommand';
+import { useCommand } from '../ui/components/useCommand';
 import { backoff } from '../utils/time';
 import { normalizePassword } from '../crypto/normalizePassword';
 import { checkUsername } from '../utils/checkUsername';

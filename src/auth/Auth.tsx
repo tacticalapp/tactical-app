@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 import { css } from '@linaria/core';
 import { Storage } from '../storage/Storage';
 import { Logo } from '../assets/logo';
-import { Text } from '../components/Themed';
-import { Button } from '../components/Button';
+import { Text } from '../ui/components/Themed';
+import { Button } from '../ui/components/Button';
 import { Login } from './Login';
 import { Signup } from './Signup';
-import { Stack, useStack } from '../components/Stack';
+import { Stack, useStack } from '../ui/components/Stack';
 
 const StartPage = React.memo((props: { onReady: (storage: Storage) => void }) => {
 

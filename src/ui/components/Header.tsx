@@ -6,14 +6,14 @@ export const Header = React.memo((props: { title: string }) => {
     return (
         <View
             style={{
-                height: 48,
+                height: 64,
                 backgroundColor: '#191919',
                 alignItems: 'center',
                 flexDirection: 'row',
                 paddingHorizontal: 16
             }}
         >
-            <Text style={{ fontSize: 16, fontWeight: '600', opacity: 0.7 }}>{props.title}</Text>
+            <Text style={{ fontSize: 18, lineHeight: 28, fontWeight: '500' }}>{props.title}</Text>
         </View>
     )
 });

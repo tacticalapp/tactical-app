@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Logo } from '../../assets/logo';
 import { Text } from '../components/Themed';
 import { NotFound } from './NotFound';
 import { Settings } from './settings/Settings';
@@ -34,7 +35,10 @@ const NavigationItem = React.memo((props: { title: string, path: string }) => {
 export const Home = React.memo(() => {
     return (
         <View style={{ flexGrow: 1, flexDirection: 'row', alignItems: 'stretch' }}>
-            <View style={{ width: 240, backgroundColor: '#000', flexDirection: 'column', alignItems: 'stretch', paddingHorizontal: 16, paddingTop: 48 }}>
+            <View style={{ width: 240, backgroundColor: '#000', flexDirection: 'column', alignItems: 'stretch', paddingHorizontal: 16 }}>
+                <View style={{ height: 72, alignItems: 'flex-start', paddingLeft: 8, paddingTop: 8, justifyContent: 'center' }}>
+                    <Logo width={145} height={38} />
+                </View>
                 <NavigationItem title="Wallets" path="/wallets" />
                 <NavigationItem title="Settings" path="/settings" />
             </View>

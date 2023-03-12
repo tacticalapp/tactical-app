@@ -6,9 +6,8 @@ import {
   Routes
 } from "react-router-dom";
 import { Home } from './fragments/Home';
-import { NotFound } from "./fragments/NotFound";
-import { Storage } from './storage/Storage';
-import { StorageContext } from './storage/useStorage';
+import { Storage } from '../storage/Storage';
+import { StorageContext } from '../storage/useStorage';
 
 export const App = React.memo((props: { storage: Storage, onReset: () => void }) => {
   return (
