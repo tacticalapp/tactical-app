@@ -32,10 +32,11 @@ const createWindow = (): void => {
             x: 14,
             y: 18,
         },
-        webPreferences: {
-
-            // preload: PRELOAD_VITE_NAME,
-        },
+        show: false,
+        paintWhenInitiallyHidden: true
+    });
+    mainWindow.on('ready-to-show', () => {
+        mainWindow.show();
     });
 
     // and load the index.html of the app.
