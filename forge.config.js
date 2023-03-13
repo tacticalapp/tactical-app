@@ -1,5 +1,9 @@
 module.exports = {
-    packagerConfig: {},
+    packagerConfig: {
+        name: 'Tactical',
+        overwrite: true,
+        icon: './icons/app'
+    },
     makers: [
         {
             name: '@electron-forge/maker-squirrel',
