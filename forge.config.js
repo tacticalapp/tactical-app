@@ -1,3 +1,4 @@
+require('dotenv').config();
 module.exports = {
     packagerConfig: {
         name: 'Tactical',
@@ -8,7 +9,8 @@ module.exports = {
         {
             name: '@electron-forge/maker-squirrel',
             config: {
-                name: 'electron_quick_start'
+                authors: 'Bulka, LLC',
+                description: 'Professional tools for TON',
             }
         },
         {
@@ -52,4 +54,17 @@ module.exports = {
             },
         },
     ],
+    publishers: [
+        {
+            name: '@electron-forge/publisher-github',
+            config: {
+                repository: {
+                    owner: 'bulkovo',
+                    name: 'tactical'
+                },
+                prerelease: true,
+                authToken: process.env.GITHUB_TOKEN
+            }
+        }
+    ]
 };
