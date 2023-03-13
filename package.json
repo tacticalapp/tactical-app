@@ -2,13 +2,16 @@
   "name": "tactical-app",
   "private": true,
   "version": "0.0.0",
-  "main": ".vite/build/main",
+  "main": ".vite/build/main.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "jest",
-    "electron:dev": "electron-forge start"
+    "electron:dev": "electron-forge start",
+    "electron:make": "electron-forge make",
+    "electron:package": "electron-forge package",
+    "electron:publish": "electron-forge publish"
   },
   "dependencies": {
     "@automerge/automerge": "^2.0.2",
@@ -42,6 +45,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@electron-forge/cli": "^6.0.5",
     "@electron-forge/maker-deb": "^6.0.5",
+    "@electron-forge/maker-rpm": "^6.0.5",
     "@electron-forge/maker-squirrel": "^6.0.5",
     "@electron-forge/maker-zip": "^6.0.5",
     "@linaria/babel-preset": "^4.4.3",
