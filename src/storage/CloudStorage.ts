@@ -51,12 +51,19 @@ export class CloudStorage {
         return await this.#requestValue(key);
     }
 
-    readValueFromCache(key: string): Buffer | null {
-        let ex = this.#readCache(key);
-        if (ex) {
-            return ex.value;
+    readValueFromCache(key: string): { value: Buffer | null, seq: number } | null {
+        let v = this.#readCache(key);
+        if (!v) {
+            this.requestToSync(key);
         }
-        return null;
+        return v;
+    }
+
+    requestToSync(key: string) {
+        if (!this.#pendingReads.has(key)) {
+            this.#pendingReads.set(key, []);
+            this.#loadingLock.invalidate();
+        }
     }
 
     async writeValue(key: string, value: Buffer | null | ((existing: Buffer | null) => Buffer)) {
@@ -189,6 +196,8 @@ export class CloudStorage {
 
             // Process changes
             if (changes.changes.length > 0) {
+
+                // Load changes
                 let updated = new Map<string, number>();
                 let changedKeys: string[] = [];
                 for (let c of changes.changes) {
@@ -198,6 +207,7 @@ export class CloudStorage {
                         updated.set(k, c.seq);
                     }
                 }
+                console.log(`[cloud] ⚡️ changes: ${changedKeys.join(',')} (${changes.seq})/(${this.#seq})`);
 
                 // Find keys to update
                 for (let k of Array.from(updated.keys())) {
@@ -229,7 +239,6 @@ export class CloudStorage {
                     this.#seq = changes.seq;
                     this.#storage.set('sync:seq', changes.seq);
                 }
-                this.#logs.cloudChanges(changedKeys, changes.seq);
             } else if (changes.seq > this.#seq) {
                 this.#seq = changes.seq;
                 this.#storage.set('sync:seq', changes.seq);

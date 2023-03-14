@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { LiveStorage } from "./LiveStorage";
 import { AutomergeValue } from "./automerge/AutomergeValue";
 import * as Automerge from '@automerge/automerge';
@@ -17,15 +18,32 @@ export class LiveValue<T extends Object> {
         }
     }
 
+    use() {
+        let [state, setState] = React.useState(this.value.value);
+        React.useEffect(() => {
+            let listener = (key: string, value: any) => {
+                if (key === this.key) {
+                    setState(value);
+                }
+            };
+            this.live.events.on('live-key-changed', listener);
+            return () => {
+                this.live.events.off('live-key-changed', listener);
+            }
+        }, []);
+
+        return [state as T, (updater: Automerge.ChangeFn<T>) => this.update(updater)] as const;
+    }
+
     update(updater: Automerge.ChangeFn<T>) {
         let updated = this.value.update(updater);
-        console.warn('Updated', this.key, this.value.value);
-        this.live.updated(this.key, updated);        
+        this.live.events.emit('live-key-changed', this.key, this.value.value);
+        this.live.updated(this.key, updated);
     }
 
     apply(remote: AutomergeValue<any>) {
         if (this.value.apply(remote)) {
-            console.warn('Updated', this.key, this.value.value);
+            this.live.events.emit('live-key-changed', this.key, this.value.value);
         }
     }
 

@@ -11,34 +11,11 @@ import { useCommand } from '../../components/useCommand';
 export const Dev = React.memo(() => {
 
     const app = useApp();
-    const doIncrement = React.useCallback(async () => {
-        let mm = app.live.get<{ counter: Automerge.Counter }>('tmp.hello.10', (d) => {
-            d.counter = new Automerge.Counter();
-        });
-        console.warn(mm);
-        console.warn(mm.value);
-        mm.update((s) => {
-            (s.counter as any).increment();
-        })
-        // let res = await app.cloud.readValue('tmp.hello2');
-        // let counter = 0;
-        // if (res.value) {
-        //     counter = res.value.readUint32BE(0);
-        // }
+    const [counter, updateCounter] = app.live.get<{ counter: any }>('tmp.counter.N@', (d) => {
+        d.counter = new Automerge.Counter();
+    }).use();
 
-        // console.warn(counter);
-
-        // counter++;
-
-        // // Write back
-        // let b = Buffer.alloc(4);
-        // b.writeUInt32BE(counter, 0);
-
-        // // Write back
-        // await app.cloud.writeValue('tmp.hello2', b);
-
-    }, []);
-    const [executing, incrementAction] = useCommand(doIncrement);
+    // const [executing, incrementAction] = useCommand(doIncrement);
 
     return (
         <>
@@ -46,7 +23,7 @@ export const Dev = React.memo(() => {
             <Content>
                 <Section>
                     <Title title="Increment" />
-                    <Button loading={executing} title="Download" onClick={incrementAction} />
+                    <Button title={'Value: ' + counter.counter} onClick={() => updateCounter((s) => s.counter.increment())} />
                 </Section>
                 {/* <Section>
                     <Title title="Username" />

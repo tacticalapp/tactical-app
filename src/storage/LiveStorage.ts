@@ -52,6 +52,7 @@ export class LiveStorage {
         // Start pending
         this.#sync = new InvalidateSync(() => this.#doSync());
         if (this.#pending.size > 0) {
+            console.warn('pending', this.#pending);
             this.#sync.invalidate();
         }
 
@@ -62,8 +63,26 @@ export class LiveStorage {
     get<T extends Object>(key: string, initial?: Automerge.ChangeFn<T> | null | undefined) {
         let k = this.#values.get(key);
         if (!k) {
-            let updated = new LiveValue<T>(key, this, initial);
+
+            // Load from cache
+            let i: Automerge.ChangeFn<T> | null | undefined | Buffer = initial;
+            let cached = this.cloud.readValueFromCache('live:' + key);
+            if (cached && cached.value) {
+                i = cached.value;
+            } else {
+                if (!cached) {
+                    this.cloud.requestToSync('live:' + key);
+                }
+                if (this.#pending.has(key)) {
+                    i = Buffer.from(Automerge.save(this.#pending.get(key)!.doc));
+                }
+            }
+
+            // Create
+            let updated = new LiveValue<T>(key, this, i);
             this.#values.set(key, updated);
+
+            // Return value
             return updated;
         } else {
             return k as LiveValue<T>;
@@ -106,23 +125,30 @@ export class LiveStorage {
 
     #doSync = async () => {
 
-        // Fetch first pending
-        let k = Array.from(this.#pending.keys());
-        if (k.length === 0) {
-            return;
-        }
-        let itm = k[0];
-        let vl = this.#pending.get(itm)!;
+        while (this.#pending.size > 0) {
 
-        // Update
-        await this.cloud.writeValue('live:' + k, (ex) => {
-            if (!ex) {
-                return Buffer.from(Automerge.save(vl.doc));
-            } else {
-                let exv = Automerge.load(ex, { actor: this.actorId });
-                let merged = Automerge.merge(exv, vl.doc);
-                return Buffer.from(Automerge.save(merged));
+            // Fetch first pending
+            let key = Array.from(this.#pending.keys())[0];
+            let value = this.#pending.get(key)!;
+            console.warn('sync', key, value.seq);
+
+            // Update
+            await this.cloud.writeValue('live:' + key, (ex) => {
+                if (!ex) {
+                    return Buffer.from(Automerge.save(value.doc));
+                } else {
+                    let exv = Automerge.load(ex, { actor: this.actorId });
+                    let merged = Automerge.merge(exv, value.doc);
+                    return Buffer.from(Automerge.save(merged));
+                }
+            });
+
+            // Remove from pending
+            let ex = this.#pending.get(key);
+            if (ex?.seq === value.seq) {
+                this.#pending.delete(key);
+                this.#persistPending();
             }
-        });
+        }
     }
 }
