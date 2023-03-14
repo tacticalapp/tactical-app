@@ -19,8 +19,9 @@ import { decryptForKey } from '../crypto/decryptForKey';
 import { motion } from 'framer-motion';
 import { Storage } from '../storage/Storage';
 import { normalizeUsername } from '../crypto/normalizeUsername';
+import { App } from '../storage/App';
 
-export const Login = React.memo((props: { onCancel: () => void, onReady: (storage: Storage) => void }) => {
+export const Login = React.memo((props: { onCancel: () => void, onReady: (app: App) => void }) => {
 
     const usernameControls = useAnimationControls();
     const [username, setUsername] = React.useState('');
@@ -180,7 +181,7 @@ export const Login = React.memo((props: { onCancel: () => void, onReady: (storag
         // Done
         //
 
-        props.onReady(storage);
+        props.onReady(await App.create(storage));
 
     }, [username, password, secretKey]);
     const [executing, restoreCommand] = useCommand(doRestore);

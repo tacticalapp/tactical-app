@@ -11,8 +11,9 @@ import { deriveStorage } from '../crypto/deriveStorage';
 import { shake } from '../utils/shake';
 import { minDelay } from '../utils/time';
 import { normalizePassword } from '../crypto/normalizePassword';
+import { App } from '../storage/App';
 
-export const Unlock = React.memo((props: { onReady: (storage: Storage) => void, onReset: () => void }) => {
+export const Unlock = React.memo((props: { onReady: (app: App) => void, onReset: () => void }) => {
 
     const passwordControls = useAnimationControls();
     const [password, setPassword] = React.useState('');
@@ -58,7 +59,7 @@ export const Unlock = React.memo((props: { onReady: (storage: Storage) => void, 
         // Done
         //
 
-        props.onReady(storage);
+        props.onReady(await App.create(storage));
 
     }, [props.onReady, password]);
     const [unlocking, unlockCommand] = useCommand(doUnlock);

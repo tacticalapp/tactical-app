@@ -2,15 +2,15 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { motion } from 'framer-motion';
 import { css } from '@linaria/core';
-import { Storage } from '../storage/Storage';
 import { Logo } from '../assets/logo';
 import { Text } from '../ui/components/Themed';
 import { Button } from '../ui/components/Button';
 import { Login } from './Login';
 import { Signup } from './Signup';
 import { Stack, useStack } from '../ui/components/Stack';
+import { App } from '../storage/App';
 
-const StartPage = React.memo((props: { onReady: (storage: Storage) => void }) => {
+const StartPage = React.memo((props: { onReady: (app: App) => void }) => {
 
     const stack = useStack();
     const onLogin = React.useCallback(() => {
@@ -58,7 +58,7 @@ const StartPage = React.memo((props: { onReady: (storage: Storage) => void }) =>
     );
 });
 
-export const Auth = React.memo((props: { onReady: (storage: Storage) => void }) => {
+export const Auth = React.memo((props: { onReady: (app: App) => void }) => {
     return (
         <View style={{ flexGrow: 1, justifyContent: 'center', flexDirection: 'column' }}>
             <View style={{ width: 336, height: 580, alignSelf: 'center', alignItems: 'center' }}>

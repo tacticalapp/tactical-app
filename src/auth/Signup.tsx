@@ -24,8 +24,9 @@ import { useStack } from '../ui/components/Stack';
 import { Backup } from './Backup';
 import { normalizeUsername } from '../crypto/normalizeUsername';
 import { normalizeSecretKey } from '../crypto/normalizeSecretKey';
+import { App } from '../storage/App';
 
-export const Signup = React.memo((props: { onCancel: () => void, onReady: (storage: Storage) => void }) => {
+export const Signup = React.memo((props: { onCancel: () => void, onReady: (app: App) => void }) => {
 
     const secretKey = React.useMemo(() => generateSecretKey(), []);
     const usernameControls = useAnimationControls();

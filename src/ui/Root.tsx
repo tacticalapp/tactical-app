@@ -6,12 +6,11 @@ import {
   Routes
 } from "react-router-dom";
 import { Home } from './fragments/Home';
-import { Storage } from '../storage/Storage';
-import { StorageContext } from '../storage/useStorage';
+import { App, AppContext } from '../storage/App';
 
-export const App = React.memo((props: { storage: Storage, onReset: () => void }) => {
+export const Root = React.memo((props: { app: App, onReset: () => void }) => {
   return (
-    <StorageContext.Provider value={props.storage}>
+    <AppContext.Provider value={props.app}>
       <View style={{ width: '100vw', height: '100vh', backgroundColor: '#111111', flexDirection: 'column' }}>
         <BrowserRouter>
           <Routes>
@@ -19,6 +18,6 @@ export const App = React.memo((props: { storage: Storage, onReset: () => void })
           </Routes>
         </BrowserRouter>
       </View>
-    </StorageContext.Provider>
+    </AppContext.Provider>
   );
 });

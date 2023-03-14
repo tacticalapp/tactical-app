@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { App } from './ui/App';
+import { Root } from './ui/Root';
 import { Logo } from './assets/logo';
 import { Auth } from './auth/Auth';
 import { Unlock } from './auth/Unlock';
@@ -8,6 +8,7 @@ import { deriveStorage } from './crypto/deriveStorage';
 import { Storage } from './storage/Storage';
 import { delay } from './utils/time';
 import { css } from '@linaria/core';
+import { App } from './storage/App';
 
 const SplashScreen = () => (
     <View style={{ flexGrow: 1, flexBasis: 0, alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center' }}>
@@ -32,8 +33,8 @@ const DraggableHeader = () => {
 
 export const Boot = React.memo(() => {
 
-    let [state, setState] = React.useState<{ mode: 'loading' } | { mode: 'auth' } | { mode: 'unlock' } | { mode: 'app', storage: Storage }>({ mode: 'loading' });
-    let onReady = React.useCallback((storage: Storage) => { setState({ mode: 'app', storage }); }, []);
+    let [state, setState] = React.useState<{ mode: 'loading' } | { mode: 'auth' } | { mode: 'unlock' } | { mode: 'app', app: App }>({ mode: 'loading' });
+    let onReady = React.useCallback((app: App) => { setState({ mode: 'app', app }); }, []);
     let onReset = React.useCallback(() => { setState({ mode: 'auth' }); }, []);
 
     // Loading
@@ -60,7 +61,10 @@ export const Boot = React.memo(() => {
                         let loaded = await Storage.load(await deriveStorage(pass));
                         if (loaded) {
                             if (!exited) {
-                                setState({ mode: 'app', storage: loaded });
+                                let app = await App.create(loaded);
+                                if (!exited) {
+                                    setState({ mode: 'app', app: app });
+                                }
                             }
                             return;
                         }
@@ -85,7 +89,7 @@ export const Boot = React.memo(() => {
     } else if (state.mode === 'unlock') {
         content = <Unlock onReady={onReady} onReset={onReset} />;
     } else if (state.mode === 'app') {
-        content = <App storage={state.storage} onReset={onReset} />;
+        content = <Root app={state.app} onReset={onReset} />;
     } else {
         content = <SplashScreen />;
     }

@@ -6,8 +6,9 @@ import Balancer from 'react-wrap-balancer';
 import { createEmergencyKit } from './createEmergencyKit';
 import { Button } from '../ui/components/Button';
 import { useCommand } from '../ui/components/useCommand';
+import { App } from '../storage/App';
 
-export const Backup = React.memo((props: { storage: Storage, password: string, onReady: (storage: Storage) => void }) => {
+export const Backup = React.memo((props: { storage: Storage, password: string, onReady: (app: App) => void }) => {
 
     const secretKey = React.useMemo(() => props.storage.get('account:secret-key') as string, []);
     const username = React.useMemo(() => props.storage.get('account:username') as string, []);
@@ -55,7 +56,7 @@ export const Backup = React.memo((props: { storage: Storage, password: string, o
         }
 
         // Done
-        props.onReady(props.storage);
+        props.onReady(await App.create(props.storage));
     }, []);
     const [executing, executingAction] = useCommand(doComplete);
 

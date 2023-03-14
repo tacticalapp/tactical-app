@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createEmergencyKit } from '../../../auth/createEmergencyKit';
-import { useStorage } from '../../../storage/useStorage';
+import { useApp } from '../../../storage/App';
 import { Button } from '../../components/Button';
 import { Content } from '../../components/Content';
 import { Header } from '../../components/Header';
@@ -11,13 +11,13 @@ import { useCommand } from '../../components/useCommand';
 
 export const Settings = React.memo(() => {
 
-    const storage = useStorage();
-    const username = storage.get('account:username') as string;
+    const app = useApp();
+    const username = app.storage.get('account:username') as string;
     const doDownloadEmergency = React.useCallback(async () => {
 
         // Load parameters
-        let secretKey = storage.get('account:secret-key') as string;
-        let username = storage.get('account:username') as string;
+        let secretKey = app.storage.get('account:secret-key') as string;
+        let username = app.storage.get('account:username') as string;
         let kit = await createEmergencyKit({ username, secretKey });
 
         // Download

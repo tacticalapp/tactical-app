@@ -2,10 +2,9 @@ import localforage from "localforage";
 import { decryptForKey } from "../crypto/decryptForKey";
 import { encryptForKey } from "../crypto/encryptForKey";
 import { keyPairFromSecret } from "../crypto/keyPairFromSecret";
+import { AsyncLock } from "../utils/lock";
 
-const instance = localforage.createInstance({
-    name: 'tactical'
-});
+const instance = localforage.createInstance({ name: 'tactical' });
 
 export class Storage {
 
@@ -44,6 +43,7 @@ export class Storage {
     #publicKey: Buffer;
     #data: { [key: string]: string | number | boolean };
     #commited: boolean;
+    #lock = new AsyncLock();
 
     private constructor(publicKey: Buffer, data: { [key: string]: string | number | boolean }, commited: boolean) {
         this.#publicKey = publicKey;
@@ -70,15 +70,19 @@ export class Storage {
     }
 
     async commit() {
-        await instance.clear();
-        await instance.setItem('tactical-key', this.#publicKey.toString('base64'));
-        await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
-        this.#commited = true;
+        await this.#lock.inLock(async () => {
+            await instance.clear();
+            await instance.setItem('tactical-key', this.#publicKey.toString('base64'));
+            await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
+            this.#commited = true;
+        });
     }
 
     async #store() {
-        if (this.#commited) {
-            await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
-        }
+        await this.#lock.inLock(async () => {
+            if (this.#commited) {
+                await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
+            }
+        });
     }
 }
