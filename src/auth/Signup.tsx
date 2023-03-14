@@ -2,7 +2,7 @@ import { useAnimationControls } from 'framer-motion';
 import * as React from 'react';
 import { TextInput, View } from 'react-native';
 import { motion } from 'framer-motion';
-import { client } from '../api/client';
+import { tacticalClient } from '../api/client';
 import { Button } from '../ui/components/Button';
 import { Text } from '../ui/components/Themed';
 import { useCommand } from '../ui/components/useCommand';
@@ -82,7 +82,7 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (app: 
         //
 
         let usernameStatus = await backoff(async () => {
-            return await client.checkUsername(normalizedUsername);
+            return await tacticalClient.checkUsername(normalizedUsername);
         });
         // NOTE: We are ignoring available flag since it is 
         //       implicitly checked by the signup request later
@@ -131,12 +131,12 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (app: 
             //
 
             const challenge = await backoff(async () => {
-                let pendingChallenge = await client.requestChallenge();
+                let pendingChallenge = await tacticalClient.requestChallenge();
                 if (pendingChallenge.kind !== 'hash') {
                     return null;
                 }
                 let solution = await solveHashChallenge(pendingChallenge.params);
-                await client.solve(pendingChallenge.id, solution);
+                await tacticalClient.solve(pendingChallenge.id, solution);
                 return pendingChallenge;
             });
             if (challenge === null) {
@@ -154,7 +154,7 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (app: 
             // Perform signup
             //
 
-            let res = await backoff(() => client.signup(authPublic, packageData, packageSignature, normalizedUsername, challenge.id, signedChallenge));
+            let res = await backoff(() => tacticalClient.signup(authPublic, packageData, packageSignature, normalizedUsername, challenge.id, signedChallenge));
             if (!res.ok) {
                 if (res.error === 'invalid_challenge') {
                     throw Error('Invalid challenge'); // Try again

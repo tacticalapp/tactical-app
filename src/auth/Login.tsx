@@ -12,7 +12,7 @@ import { shake } from '../utils/shake';
 import { normalizeSecretKey } from '../crypto/normalizeSecretKey';
 import { derive } from '../crypto/derive';
 import { deriveStorage } from '../crypto/deriveStorage';
-import { client } from '../api/client';
+import { tacticalClient } from '../api/client';
 import { solveHashChallenge } from '../utils/solveHashChallenge';
 import { signPackage } from '../crypto/signPackage';
 import { decryptForKey } from '../crypto/decryptForKey';
@@ -92,12 +92,12 @@ export const Login = React.memo((props: { onCancel: () => void, onReady: (app: A
             //
 
             const challenge = await backoff(async () => {
-                let pendingChallenge = await client.requestChallenge();
+                let pendingChallenge = await tacticalClient.requestChallenge();
                 if (pendingChallenge.kind !== 'hash') {
                     return null;
                 }
                 let solution = await solveHashChallenge(pendingChallenge.params);
-                await client.solve(pendingChallenge.id, solution);
+                await tacticalClient.solve(pendingChallenge.id, solution);
                 return pendingChallenge;
             });
             if (challenge === null) {
@@ -115,7 +115,7 @@ export const Login = React.memo((props: { onCancel: () => void, onReady: (app: A
             // Perform login
             //
 
-            let res = await backoff(() => client.login(normalizedUsername, challenge.id, signedChallenge));
+            let res = await backoff(() => tacticalClient.login(normalizedUsername, challenge.id, signedChallenge));
             if (!res.ok) {
                 if (res.error === 'invalid_challenge') {
                     throw Error('Invalid challenge'); // Try again

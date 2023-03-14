@@ -3,6 +3,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Logo } from '../../assets/logo';
 import { Text } from '../components/Themed';
+import { Dev } from './dev/Dev';
 import { NotFound } from './NotFound';
 import { Settings } from './settings/Settings';
 import { Wallets } from './wallets/Wallets';
@@ -41,12 +42,14 @@ export const Home = React.memo(() => {
                 </View>
                 <NavigationItem title="Wallets" path="/wallets" />
                 <NavigationItem title="Settings" path="/settings" />
+                <NavigationItem title="Development" path="/dev" />
             </View>
             <View style={{ flexGrow: 1, flexBasis: 0, flexDirection: 'column', alignItems: 'stretch' }}>
                 <Routes>
                     <Route path="/" element={<HomePlacehodler />} />
                     <Route path="/wallets" element={<Wallets />} />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/dev" element={<Dev />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </View>

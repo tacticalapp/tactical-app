@@ -134,6 +134,29 @@ export class TacticalClient {
     }
 }
 
+const meResponse = z.object({
+    username: z.string()
+});
+
+const keysResponse = z.object({
+    entries: z.array(z.object({
+        seq: z.number(),
+        key: z.string(),
+        value: z.string().nullable(),
+    }))
+});
+
+const updateResponse = z.object({
+    seq: z.number(),
+    key: z.string(),
+    value: z.string().nullable(),
+});
+
+const changesResponse = z.object({
+    seq: z.number(),
+    changes: z.array(z.object({ seq: z.number(), key: z.string() }))
+});
+
 export class TacticalAccountClient {
 
     #endpoint: string;
@@ -146,10 +169,45 @@ export class TacticalAccountClient {
 
     async getMe() {
         let r = await this.#doRequest('/account/me', {});
-        console.warn(r);
+        let parsed = meResponse.safeParse(r.data);
+        if (!parsed.success) {
+            throw new Error("Invalid response");
+        }
+        return parsed.data;
     }
 
-    async #doRequest(path: string, data: any) {
+    async getKeys(encryptedKeys: string[]) {
+        let r = await this.#doRequest('/storage/get', { keys: encryptedKeys });
+        let parsed = keysResponse.safeParse(r.data);
+        if (!parsed.success) {
+            throw new Error("Invalid response");
+        }
+        return parsed.data.entries;
+    }
+
+    async getChanges(seq: number) {
+        let r = await this.#doRequest('/storage/changes', { seq });
+        let parsed = changesResponse.safeParse(r.data);
+        if (!parsed.success) {
+            throw new Error("Invalid response");
+        }
+        return parsed.data;
+    }
+
+    async updateKey(key: string, value: string | null, seq: number | null) {
+        let r = await this.#doRequest('/storage/update', { key, value, seq }, [200, 409]);
+        let parsed = updateResponse.safeParse(r.data);
+        if (!parsed.success) {
+            throw new Error("Invalid response");
+        }
+        if (r.status === 409) {
+            return { status: 'conflict' as const, ...parsed.data };
+        } else {
+            return { status: 'ok' as const, ...parsed.data };
+        }
+    }
+
+    async #doRequest(path: string, data: any, statuses: number[] = [200]) {
 
         // Prepare request
         let body = JSON.stringify(data);
@@ -170,8 +228,12 @@ export class TacticalAccountClient {
                 ['X-Tactical-Time']: time,
                 ['X-Tactical-Token']: pk.toString('base64'),
                 ['X-Tactical-Signature']: signed.toString('base64'),
-            }
+            },
+            validateStatus(status) {
+                return statuses.includes(status);
+            },
+            timeout: 5000
         });
-        return response.data;
+        return response;
     }
 }

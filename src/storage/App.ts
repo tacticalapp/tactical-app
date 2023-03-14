@@ -1,5 +1,10 @@
 import * as React from 'react';
+import { tacticalClient } from '../api/client';
+import { TacticalAccountClient } from '../api/TacticalClient';
+import { CloudStorage } from './CloudStorage';
+import { Events } from './Events';
 import { LiveStorage } from "./LiveStorage";
+import { Logs } from './Logs';
 import { Storage } from "./Storage";
 
 //
@@ -9,19 +14,29 @@ import { Storage } from "./Storage";
 export class App {
 
     static async create(storage: Storage) {
-        let liveStorage = new LiveStorage(storage);
-        let res = new App(storage, liveStorage);
+        let logs = new Logs();
+        let events = new Events();
+        let client = new TacticalAccountClient(tacticalClient.endpoint, Buffer.from(storage.get('account:token') as string, 'base64'));
+        let cloud = new CloudStorage(storage, events, logs, client);
+        let live = new LiveStorage(storage, cloud, events);
+        let res = new App(storage, live, cloud, events, client);
         await res.#awaitForData();
         return res;
     }
 
+    readonly events: Events;
     readonly storage: Storage;
-    readonly liveStorage: LiveStorage;
+    readonly cloud: CloudStorage;
+    readonly live: LiveStorage;
     readonly username: string;
+    readonly client: TacticalAccountClient;
 
-    constructor(storage: Storage, liveStorage: LiveStorage) {
+    constructor(storage: Storage, live: LiveStorage, cloud: CloudStorage, events: Events, client: TacticalAccountClient) {
         this.storage = storage;
-        this.liveStorage = liveStorage;
+        this.events = events;
+        this.live = live;
+        this.client = client;
+        this.cloud = cloud;
         this.username = storage.get('account:username') as string;
     }
 
@@ -31,9 +46,9 @@ export class App {
         // Preload data
         //
 
-        await Promise.all([
-            this.liveStorage.awaitValue('contacts')
-        ]);
+        // await Promise.all([
+        //     this.liveStorage.awaitValue('contacts')
+        // ]);
     }
 }
 

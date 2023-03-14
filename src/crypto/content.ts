@@ -17,8 +17,15 @@ async function deriveValueNonce(secret: Buffer, key: string) {
     return (await deriveSymmetricPath(secret, ['content', 'value-nonce', key])).subarray(0, 24);
 }
 
+export async function contentKeyEncrypt(args: { key: string, secret: Buffer }) {
+    let keyEncryption = await deriveKeyEncryption(args.secret);
+    let keyNonce = await deriveNonce(args.secret);
+    let key = Buffer.from(tc.secretbox(Buffer.from(args.key), keyNonce, keyEncryption)).toString('base64');
+    return key;
+}
+
 export async function contentEncrypt(args: { key: string, value: Buffer, secret: Buffer }) {
-    
+
     // Encrypt key
     let keyEncryption = await deriveKeyEncryption(args.secret);
     let keyNonce = await deriveNonce(args.secret);
@@ -33,6 +40,20 @@ export async function contentEncrypt(args: { key: string, value: Buffer, secret:
         value
     };
 }
+
+export async function contentKeyDecrypt(args: { key: string, secret: Buffer }) {
+
+    // Load key
+    let keyEncryption = await deriveKeyEncryption(args.secret);
+    let keyNonce = await deriveNonce(args.secret);
+    let keyB = tc.secretbox.open(Buffer.from(args.key, 'base64'), keyNonce, keyEncryption);
+    if (!keyB) {
+        return null;
+    }
+    let key = Buffer.from(keyB).toString();
+    return key;
+}
+
 
 export async function contentDecrypt(args: { key: string, value: string, secret: Buffer }) {
 

@@ -1,16 +1,18 @@
-import * as Automerge from '@automerge/automerge';
 import { randomBytes } from '../crypto/randomBytes';
 import { Storage } from "./Storage";
+import { CloudStorage } from './CloudStorage';
+import { Events } from './Events';
 
 export class LiveStorage {
+    #cloud: CloudStorage;
+    #events: Events;
     #storage: Storage;
-    #accountKey: Buffer;
     #actorId: string;
-    #seq: number = 0;
 
-    constructor(storage: Storage) {
+    constructor(storage: Storage, cloud: CloudStorage, events: Events) {
         this.#storage = storage;
-        this.#accountKey = Buffer.from(storage.get('account:secret') as string);
+        this.#cloud = cloud;
+        this.#events = events;
         let id = storage.get('sync:actor-id');
         if (typeof id === 'string') {
             this.#actorId = id;
@@ -18,13 +20,10 @@ export class LiveStorage {
             this.#actorId = randomBytes(16).toString('hex');
             this.#storage.set('sync:actor-id', this.#actorId);
         }
-        let seq = storage.get('sync:seq');
-        if (typeof seq === 'number') {
-            this.#seq = seq;
-        }
+        this.#events.on('cloud-key-changed', this.#handleValueChanged);
     }
 
-    async readValue(key: string) {
+    #handleValueChanged = (key: string, value: Buffer | null) => {
 
     }
 
