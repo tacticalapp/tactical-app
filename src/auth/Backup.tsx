@@ -45,7 +45,7 @@ export const Backup = React.memo((props: { storage: Storage, password: string, o
     const doComplete = React.useCallback(async () => {
 
         // Commit storage
-        await props.storage.commit();
+        await props.storage.attach();
 
         //
         // Simplify development
