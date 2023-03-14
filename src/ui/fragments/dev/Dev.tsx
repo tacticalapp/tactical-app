@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createEmergencyKit } from '../../../auth/createEmergencyKit';
+import * as Automerge from '@automerge/automerge';
 import { useApp } from '../../../storage/App';
 import { Button } from '../../components/Button';
 import { Content } from '../../components/Content';
@@ -12,22 +12,30 @@ export const Dev = React.memo(() => {
 
     const app = useApp();
     const doIncrement = React.useCallback(async () => {
-            let res = await app.cloud.readValue('tmp.hello2');
-            let counter = 0;
-            if (res.value) {
-                counter = res.value.readUint32BE(0);
-            }
+        let mm = app.live.get<{ counter: Automerge.Counter }>('tmp.hello.10', (d) => {
+            d.counter = new Automerge.Counter();
+        });
+        console.warn(mm);
+        console.warn(mm.value);
+        mm.update((s) => {
+            (s.counter as any).increment();
+        })
+        // let res = await app.cloud.readValue('tmp.hello2');
+        // let counter = 0;
+        // if (res.value) {
+        //     counter = res.value.readUint32BE(0);
+        // }
 
-            console.warn(counter);
+        // console.warn(counter);
 
-            counter++;
+        // counter++;
 
-            // Write back
-            let b = Buffer.alloc(4);
-            b.writeUInt32BE(counter, 0);
+        // // Write back
+        // let b = Buffer.alloc(4);
+        // b.writeUInt32BE(counter, 0);
 
-            // Write back
-            await app.cloud.writeValue('tmp.hello2', b);
+        // // Write back
+        // await app.cloud.writeValue('tmp.hello2', b);
 
     }, []);
     const [executing, incrementAction] = useCommand(doIncrement);

@@ -22,6 +22,7 @@ export class CloudStorage {
     #loadingLock: InvalidateSync;
     #syncLock: InvalidateSync;
     #logs: Logs;
+    #detached: boolean = false;
 
     constructor(storage: Storage, events: Events, logs: Logs, client: TacticalAccountClient) {
         this.#storage = storage;
@@ -50,6 +51,14 @@ export class CloudStorage {
         return await this.#requestValue(key);
     }
 
+    readValueFromCache(key: string): Buffer | null {
+        let ex = this.#readCache(key);
+        if (ex) {
+            return ex.value;
+        }
+        return null;
+    }
+
     async writeValue(key: string, value: Buffer | null | ((existing: Buffer | null) => Buffer)) {
         while (true) {
 
@@ -64,6 +73,10 @@ export class CloudStorage {
                 return;
             }
         }
+    }
+
+    detach() {
+        this.#detached = true;
     }
 
     async #writeValue(key: string, value: Buffer | null, seq: number | null) {
@@ -163,7 +176,7 @@ export class CloudStorage {
     }
 
     async #doSync() {
-        while (true) {
+        while (!this.#detached) {
 
             // Get changes
             let changes = await this.#client.getChanges(this.#seq);

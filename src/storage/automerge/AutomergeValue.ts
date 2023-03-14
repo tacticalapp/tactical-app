@@ -2,14 +2,16 @@ import * as Automerge from '@automerge/automerge';
 
 export class AutomergeValue<T> {
 
-    static fromEmpty<T>(actor: string, initial: Automerge.ChangeFn<T>) {
+    static fromEmpty<T>(actor: string, initial?: Automerge.ChangeFn<T> | null | undefined) {
         let doc = Automerge.init<T>({ actor });
-        let updated = Automerge.change(doc, initial);
-        return new AutomergeValue<T>(updated);
+        if (initial) {
+            doc = Automerge.change(doc, initial);
+        }
+        return new AutomergeValue<T>(doc);
     }
 
-    static fromExisting<T>(src: Buffer) {
-        return new AutomergeValue<T>(Automerge.load<T>(src));
+    static fromExisting<T>(actor: string, src: Buffer) {
+        return new AutomergeValue<T>(Automerge.load<T>(src, { actor }));
     }
 
     #doc: Automerge.Doc<T>;
@@ -20,6 +22,7 @@ export class AutomergeValue<T> {
 
     update(updater: Automerge.ChangeFn<T>) {
         this.#doc = Automerge.change(this.#doc, updater);
+        return this.#doc;
     }
 
     get value() {
@@ -32,16 +35,17 @@ export class AutomergeValue<T> {
 
     apply(remote: AutomergeValue<T>) {
         if (Automerge.equals(remote.#doc, this.#doc)) {
-            return;
+            return false;
         }
         this.#doc = Automerge.merge(this.#doc, remote.#doc);
+        return true;
     }
 
     save() {
         return Buffer.from(Automerge.save(this.#doc));
     }
 
-    clone() {
-        return AutomergeValue.fromExisting<T>(this.save());
+    clone(actor: string) {
+        return AutomergeValue.fromExisting<T>(actor, this.save());
     }
 }

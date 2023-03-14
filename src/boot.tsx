@@ -36,6 +36,13 @@ export const Boot = React.memo(() => {
     let [state, setState] = React.useState<{ mode: 'loading' } | { mode: 'auth' } | { mode: 'unlock' } | { mode: 'app', app: App }>({ mode: 'loading' });
     let onReady = React.useCallback((app: App) => { setState({ mode: 'app', app }); }, []);
     let onReset = React.useCallback(() => { setState({ mode: 'auth' }); }, []);
+    React.useEffect(() => {
+        return () => {
+            if (state.mode === 'app') {
+                state.app.destroy();
+            }
+        };
+    }, [state]);
 
     // Loading
     React.useEffect(() => {

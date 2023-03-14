@@ -50,6 +50,12 @@ export class App {
         //     this.liveStorage.awaitValue('contacts')
         // ]);
     }
+
+    destroy() {
+        console.warn('Destroy app');
+        this.storage.detach();
+        this.cloud.detach();
+    }
 }
 
 //

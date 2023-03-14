@@ -42,12 +42,13 @@ export class Storage {
 
     #publicKey: Buffer;
     #data: { [key: string]: string | number | boolean };
-    #commited: boolean;
+    #attached: boolean;
     #lock = new AsyncLock();
 
-    private constructor(publicKey: Buffer, data: { [key: string]: string | number | boolean }, commited: boolean) {
+
+    private constructor(publicKey: Buffer, data: { [key: string]: string | number | boolean }, attached: boolean) {
         this.#publicKey = publicKey;
-        this.#commited = commited;
+        this.#attached = attached;
         this.#data = { ...data };
     }
 
@@ -69,18 +70,24 @@ export class Storage {
         }
     }
 
-    async commit() {
+    async attach() {
         await this.#lock.inLock(async () => {
             await instance.clear();
             await instance.setItem('tactical-key', this.#publicKey.toString('base64'));
             await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
-            this.#commited = true;
+            this.#attached = true;
+        });
+    }
+
+    async detach() {
+        await this.#lock.inLock(async () => {
+            this.#attached = false;
         });
     }
 
     async #store() {
         await this.#lock.inLock(async () => {
-            if (this.#commited) {
+            if (this.#attached) {
                 await instance.setItem('tactical-data', (await encryptForKey(this.#publicKey, Buffer.from(JSON.stringify(this.#data)))).toString('base64'));
             }
         });
