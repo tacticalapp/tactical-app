@@ -167,7 +167,7 @@ export const Login = React.memo((props: { onCancel: () => void, onReady: (app: A
         storage.set('account:secret-key', normalizedSecretKey);
         storage.set('account:token', loginData.token);
         storage.set('account:secret', loginData.accountSecret.toString('base64'));
-        await storage.commit();
+        await storage.attach();
 
         //
         // Simplify development

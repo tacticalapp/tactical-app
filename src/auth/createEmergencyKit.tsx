@@ -1,3 +1,5 @@
+import { formatNormalizedSecretKey } from '../crypto/formatNormalizedSecretKey';
+
 export async function createEmergencyKit(args: { username: string, secretKey: string }) {
 
     // Dynamic import
@@ -22,7 +24,7 @@ export async function createEmergencyKit(args: { username: string, secretKey: st
 
                 <Text>Tactical Emergency Kit</Text>
                 <Text>Username: {args.username}</Text>
-                <Text>Secret Key: {args.secretKey}</Text>
+                <Text>Secret Key: {formatNormalizedSecretKey(args.secretKey)}</Text>
                 <Text>Password: </Text>
             </Page>
         </Document>

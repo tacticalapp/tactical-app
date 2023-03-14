@@ -2,6 +2,7 @@ import * as React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Logo } from '../../assets/logo';
+import { AppDraggable } from '../components/AppDraggable';
 import { Text } from '../components/Themed';
 import { Dev } from './dev/Dev';
 import { NotFound } from './NotFound';
@@ -53,6 +54,7 @@ export const Home = React.memo(() => {
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </View>
+            <AppDraggable />
         </View>
     );
 });

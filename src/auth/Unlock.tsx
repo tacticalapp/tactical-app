@@ -12,6 +12,7 @@ import { shake } from '../utils/shake';
 import { minDelay } from '../utils/time';
 import { normalizePassword } from '../crypto/normalizePassword';
 import { App } from '../storage/App';
+import { AppDraggable } from '../ui/components/AppDraggable';
 
 export const Unlock = React.memo((props: { onReady: (app: App) => void, onReset: () => void }) => {
 
@@ -65,64 +66,67 @@ export const Unlock = React.memo((props: { onReady: (app: App) => void, onReset:
     const [unlocking, unlockCommand] = useCommand(doUnlock);
 
     return (
-        <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-            <View style={{ width: 336, height: 300, alignSelf: 'center', alignItems: 'center' }}>
-                <motion.div
-                    className={container}
-                    initial={{ opacity: 0, scale: 1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{
-                        duration: 2,
-                        delay: 0.01,
-                        ease: 'anticipate'
-                    }}
-                >
-                    <Text style={{ fontSize: 18, opacity: 0.8, fontWeight: '400', marginTop: 16 }}>Please, unlock your account</Text>
-                    <View style={{ flexGrow: 1, width: 336, justifyContent: 'center', alignItems: 'stretch', gap: 16 }}>
-                        <motion.div animate={passwordControls}>
-                            <TextInput
-                                style={{
-                                    width: 336,
-                                    height: 46,
-                                    paddingHorizontal: 12,
-                                    paddingVertical: 6,
-                                    borderWidth: 1,
-                                    borderStyle: 'solid',
-                                    borderColor: 'rgba(255, 255, 255, 0.6)',
-                                    borderRadius: 4,
-                                    marginBottom: 8,
-                                    flexShrink: 0
-                                }}
-                                placeholder="Password"
-                                keyboardType="email-address"
-                                placeholderTextColor="rgba(255, 255, 255, 0.6)"
-                                secureTextEntry={true}
-                                value={password}
-                                onChangeText={setPassword}
-                                onSubmitEditing={unlockCommand}
-                                autoFocus={true}
-                                blurOnSubmit={false}
-                            />
-                        </motion.div>
-                        <Button title="Unlock" loading={unlocking} onClick={unlockCommand} />
-                        <Button kind="ghost" title="Log out" onClick={resetCommand} />
-                    </View>
-                </motion.div>
+        <>
+            <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+                <View style={{ width: 336, height: 300, alignSelf: 'center', alignItems: 'center' }}>
+                    <motion.div
+                        className={container}
+                        initial={{ opacity: 0, scale: 1 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{
+                            duration: 2,
+                            delay: 0.01,
+                            ease: 'anticipate'
+                        }}
+                    >
+                        <Text style={{ fontSize: 18, opacity: 0.8, fontWeight: '400', marginTop: 16 }}>Please, unlock your account</Text>
+                        <View style={{ flexGrow: 1, width: 336, justifyContent: 'center', alignItems: 'stretch', gap: 16 }}>
+                            <motion.div animate={passwordControls}>
+                                <TextInput
+                                    style={{
+                                        width: 336,
+                                        height: 46,
+                                        paddingHorizontal: 12,
+                                        paddingVertical: 6,
+                                        borderWidth: 1,
+                                        borderStyle: 'solid',
+                                        borderColor: 'rgba(255, 255, 255, 0.6)',
+                                        borderRadius: 4,
+                                        marginBottom: 8,
+                                        flexShrink: 0
+                                    }}
+                                    placeholder="Password"
+                                    keyboardType="email-address"
+                                    placeholderTextColor="rgba(255, 255, 255, 0.6)"
+                                    secureTextEntry={true}
+                                    value={password}
+                                    onChangeText={setPassword}
+                                    onSubmitEditing={unlockCommand}
+                                    autoFocus={true}
+                                    blurOnSubmit={false}
+                                />
+                            </motion.div>
+                            <Button title="Unlock" loading={unlocking} onClick={unlockCommand} />
+                            <Button kind="ghost" title="Log out" onClick={resetCommand} />
+                        </View>
+                    </motion.div>
 
-                <motion.div
-                    className={logoContainer}
-                    initial={{ transform: `translateY(${(300 - 38) / 2}px)` }}
-                    animate={{ transform: `translateY(0px)` }}
-                    transition={{
-                        duration: 1,
-                        delay: 0,
-                        ease: [0.4, 0.0, 0.2, 1]
-                    }}
-                >
-                    <Logo width={145} height={38} />
-                </motion.div>
+                    <motion.div
+                        className={logoContainer}
+                        initial={{ transform: `translateY(${(300 - 38) / 2}px)` }}
+                        animate={{ transform: `translateY(0px)` }}
+                        transition={{
+                            duration: 1,
+                            delay: 0,
+                            ease: [0.4, 0.0, 0.2, 1]
+                        }}
+                    >
+                        <Logo width={145} height={38} />
+                    </motion.div>
+                </View>
             </View>
-        </View>
+            <AppDraggable />
+        </>
     )
 });
 

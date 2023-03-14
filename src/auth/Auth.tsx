@@ -9,6 +9,7 @@ import { Login } from './Login';
 import { Signup } from './Signup';
 import { Stack, useStack } from '../ui/components/Stack';
 import { App } from '../storage/App';
+import { AppDraggable } from '../ui/components/AppDraggable';
 
 const StartPage = React.memo((props: { onReady: (app: App) => void }) => {
 
@@ -60,11 +61,14 @@ const StartPage = React.memo((props: { onReady: (app: App) => void }) => {
 
 export const Auth = React.memo((props: { onReady: (app: App) => void }) => {
     return (
-        <View style={{ flexGrow: 1, justifyContent: 'center', flexDirection: 'column' }}>
-            <View style={{ width: 336, height: 580, alignSelf: 'center', alignItems: 'center' }}>
-                <Stack initial={<StartPage onReady={props.onReady} />} />
+        <>
+            <View style={{ flexGrow: 1, justifyContent: 'center', flexDirection: 'column' }}>
+                <View style={{ width: 336, height: 580, alignSelf: 'center', alignItems: 'center' }}>
+                    <Stack initial={<StartPage onReady={props.onReady} />} />
+                </View>
             </View>
-        </View>
+            <AppDraggable />
+        </>
     );
 });
 

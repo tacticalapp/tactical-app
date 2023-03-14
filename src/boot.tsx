@@ -7,29 +7,17 @@ import { Unlock } from './auth/Unlock';
 import { deriveStorage } from './crypto/deriveStorage';
 import { Storage } from './storage/Storage';
 import { delay } from './utils/time';
-import { css } from '@linaria/core';
 import { App } from './storage/App';
+import { AppDraggable } from './ui/components/AppDraggable';
 
 const SplashScreen = () => (
-    <View style={{ flexGrow: 1, flexBasis: 0, alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center' }}>
-        <Logo width={145} height={38} />
-    </View>
+    <>
+        <View style={{ flexGrow: 1, flexBasis: 0, alignSelf: 'stretch', justifyContent: 'center', alignItems: 'center' }}>
+            <Logo width={145} height={38} />
+        </View>
+        <AppDraggable />
+    </>
 );
-
-const draggableStyle = css`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    -webkit-app-region: drag;
-    width: 100vw;
-    height: 50px;
-    z-index: 1000;
-`;
-
-const DraggableHeader = () => {
-    return <div className={draggableStyle} />
-};
 
 export const Boot = React.memo(() => {
 
@@ -105,7 +93,6 @@ export const Boot = React.memo(() => {
             <View style={{ width: '100vw', height: '100vh', backgroundColor: '#111111', flexDirection: 'column' }}>
                 {content}
             </View>
-            <DraggableHeader />
         </>
     )
 });

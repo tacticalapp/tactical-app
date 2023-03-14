@@ -56,6 +56,11 @@ export class App {
         this.storage.detach();
         this.cloud.detach();
     }
+
+    async destroyAsync() {
+        await this.storage.detach();
+        this.cloud.detach();
+    }
 }
 
 //
