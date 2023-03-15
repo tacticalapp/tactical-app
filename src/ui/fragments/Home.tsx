@@ -37,7 +37,7 @@ const NavigationItem = React.memo((props: { title: string, path: string }) => {
 export const Home = React.memo(() => {
     return (
         <View style={{ flexGrow: 1, flexDirection: 'row', alignItems: 'stretch' }}>
-            <View style={{ width: 240, backgroundColor: '#000', flexDirection: 'column', alignItems: 'stretch', paddingHorizontal: 16 }}>
+            <View style={{ width: 240, flexDirection: 'column', alignItems: 'stretch', paddingHorizontal: 16 }}>
                 <View style={{ height: 72, alignItems: 'flex-start', paddingLeft: 8, paddingTop: 8, justifyContent: 'center' }}>
                     <Logo width={145} height={38} />
                 </View>
@@ -45,7 +45,7 @@ export const Home = React.memo(() => {
                 <NavigationItem title="Settings" path="/settings" />
                 <NavigationItem title="Development" path="/dev" />
             </View>
-            <View style={{ flexGrow: 1, flexBasis: 0, flexDirection: 'column', alignItems: 'stretch' }}>
+            <View style={{ flexGrow: 1, flexBasis: 0, flexDirection: 'column', alignItems: 'stretch', backgroundColor: 'var(--theme-bg)' }}>
                 <Routes>
                     <Route path="/" element={<HomePlacehodler />} />
                     <Route path="/wallets" element={<Wallets />} />

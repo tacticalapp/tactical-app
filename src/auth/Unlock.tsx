@@ -66,7 +66,7 @@ export const Unlock = React.memo((props: { onReady: (app: App) => void, onReset:
     const [unlocking, unlockCommand] = useCommand(doUnlock);
 
     return (
-        <>
+        <View style={{ width: '100vw', height: '100vh', flexDirection: 'column' }}>
             <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                 <View style={{ width: 336, height: 300, alignSelf: 'center', alignItems: 'center' }}>
                     <motion.div
@@ -126,7 +126,7 @@ export const Unlock = React.memo((props: { onReady: (app: App) => void, onReset:
                 </View>
             </View>
             <AppDraggable />
-        </>
+        </View>
     )
 });
 

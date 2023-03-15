@@ -27,7 +27,15 @@ const createWindow = (): void => {
         minWidth: 450,
         minHeight: 550,
         titleBarStyle: 'hiddenInset',
-        backgroundColor: '#111111',
+        ...(process.platform === 'darwin' ? {
+            transparent: true,
+            vibrancy: 'sidebar',
+            visualEffectState: "followWindow",
+            backgroundColor: "#00000000",
+        } : {
+            backgroundColor: '#111111',
+        }),
+
         trafficLightPosition: {
             x: 14,
             y: 18,

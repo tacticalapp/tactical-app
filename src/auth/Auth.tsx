@@ -62,12 +62,14 @@ const StartPage = React.memo((props: { onReady: (app: App) => void }) => {
 export const Auth = React.memo((props: { onReady: (app: App) => void }) => {
     return (
         <>
-            <View style={{ flexGrow: 1, justifyContent: 'center', flexDirection: 'column' }}>
-                <View style={{ width: 336, height: 580, alignSelf: 'center', alignItems: 'center' }}>
-                    <Stack initial={<StartPage onReady={props.onReady} />} />
+            <View style={{ width: '100vw', height: '100vh', flexDirection: 'column', backgroundColor: 'var(--theme-bg)' }}>
+                <View style={{ flexGrow: 1, justifyContent: 'center', flexDirection: 'column' }}>
+                    <View style={{ width: 336, height: 580, alignSelf: 'center', alignItems: 'center' }}>
+                        <Stack initial={<StartPage onReady={props.onReady} />} />
+                    </View>
                 </View>
+                <AppDraggable />
             </View>
-            <AppDraggable />
         </>
     );
 });

@@ -13,11 +13,9 @@ export const Root = React.memo((props: { app: App, onReset: () => void }) => {
   return (
     <RecoilRoot>
       <AppContext.Provider value={props.app}>
-        <View style={{ width: '100vw', height: '100vh', backgroundColor: '#111111', flexDirection: 'column' }}>
+        <View style={{ width: '100vw', height: '100vh', flexDirection: 'column' }}>
           <MemoryRouter>
-            <Routes>
-              <Route path="*" element={<Home />} />
-            </Routes>
+            <Home />
           </MemoryRouter>
         </View>
       </AppContext.Provider>
