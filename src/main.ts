@@ -41,7 +41,10 @@ const createWindow = (): void => {
             y: 18,
         },
         show: false,
-        paintWhenInitiallyHidden: true
+        paintWhenInitiallyHidden: true,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+        }
     });
     mainWindow.on('ready-to-show', () => {
         mainWindow.show();

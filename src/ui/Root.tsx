@@ -5,7 +5,7 @@ import {
   Route,
   Routes
 } from "react-router-dom";
-import { Home } from './fragments/Home';
+import { Home } from './Home';
 import { App, AppContext } from '../storage/App';
 import { RecoilRoot } from 'recoil';
 

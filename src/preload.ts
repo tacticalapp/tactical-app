@@ -1,3 +1,6 @@
-console.log('preload script');
+import { contextBridge } from "electron";
 
-export {};
+contextBridge.exposeInMainWorld("electron", {
+    __is_electron: true,
+    platform: process.platform
+});

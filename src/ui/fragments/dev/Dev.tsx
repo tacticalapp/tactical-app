@@ -7,6 +7,7 @@ import { Header } from '../../components/Header';
 import { Section } from '../../components/Section';
 import { Title } from '../../components/Title';
 import { useCommand } from '../../components/useCommand';
+import { plafrorm } from '../../../utils/platform';
 
 export const Dev = React.memo(() => {
 
@@ -24,6 +25,10 @@ export const Dev = React.memo(() => {
                 <Section>
                     <Title title="Increment" />
                     <Button title={'Value: ' + counter.counter} onClick={() => updateCounter((s) => s.counter.increment())} />
+                </Section>
+                <Section>
+                    <Title title="Detected Platform" />
+                    <span>{plafrorm}</span>
                 </Section>
                 {/* <Section>
                     <Title title="Username" />
