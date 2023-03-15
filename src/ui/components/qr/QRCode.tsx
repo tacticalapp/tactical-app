@@ -1,53 +1,48 @@
 import * as React from 'react';
-import { View, Image } from 'react-native';
+import { View } from 'react-native';
 import { createQRMatrix } from './QRMatrix';
 
 export const QRCode = React.memo((props: { data: string, size: number }) => {
     const matrix = createQRMatrix(props.data, 'quartile');
     const dotSize = Math.floor((props.size - 8 * 2) / matrix.size);
     const padding = Math.floor((props.size - dotSize * matrix.size) / 2);
-    const items: JSX.Element[] = [];
+
+    // Create locators
+    let locators: any[] = [];
+    for (let [x, y] of [[0, 0], [0, matrix.size - 7], [matrix.size - 7, 0]]) {
+        locators.push(
+            <rect x={x} y={y} width="7" height="7" fill="black" />
+        );
+        locators.push(
+            <rect x={x + 1} y={y + 1} width="5" height="5" fill="white" />
+        );
+        locators.push(
+            <rect x={x + 2} y={y + 2} width="3" height="3" fill="black" />
+        );
+    }
+
+    // Create parts
+    let parts: string[] = [];
     for (let x = 0; x < matrix.size; x++) {
-        let row: JSX.Element[] = [];
         for (let y = 0; y < matrix.size; y++) {
             let dot = matrix.getNeighbors(x, y);
-
-            // Process if dot is black
             if (dot.current) {
-                let borderTopLeftRadius = 0;
-                let borderTopRightRadius = 0;
-                let borderBottomLeftRadius = 0;
-                let borderBottomRightRadius = 0;
-
-                if (!dot.top && !dot.left) {
-                    borderTopLeftRadius = dotSize / 2;
-                }
-                if (!dot.left && !dot.bottom) {
-                    borderBottomLeftRadius = dotSize / 2;
-                }
-                if (!dot.right && !dot.bottom) {
-                    borderBottomRightRadius = dotSize / 2;
-                }
-                if (!dot.right && !dot.top) {
-                    borderTopRightRadius = dotSize / 2;
-                }
-
-                row.push(<View key={`${x}-${y}`} style={{
-                    width: dotSize, height: dotSize, backgroundColor: '#000',
-                    borderTopLeftRadius,
-                    borderTopRightRadius,
-                    borderBottomLeftRadius,
-                    borderBottomRightRadius
-                }} />);
-            } else {
-                row.push(<View key={`${x}-${y}`} style={{ width: dotSize, height: dotSize, backgroundColor: 'white', borderRadius: dotSize / 2 }} />);
+                parts.push(`M ${x} ${y} l 1 0 0 1 -1 0 Z`);
             }
         }
-        items.push(<View key={x} style={{ flexDirection: 'row' }}>{row}</View>);
     }
+
     return (
         <View style={{ width: props.size, height: props.size, backgroundColor: 'white', padding: padding, flexWrap: 'wrap', borderRadius: 8 }}>
-            {items}
+            <svg
+                version="1.1"
+                viewBox={`0 0 ${matrix.size} ${matrix.size}`}
+                width={`${dotSize * matrix.size}px`}
+                height={`${dotSize * matrix.size}px`}
+            >
+                <path d={parts.join(' ')} fill={'#000'} />
+                {locators}
+            </svg>
         </View>
     );
 });
