@@ -3,7 +3,7 @@ module.exports = {
     packagerConfig: {
         name: 'Tactical',
         overwrite: true,
-        icon: './icons/app'
+        icon: './icons/app',
     },
     makers: [
         {

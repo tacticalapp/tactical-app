@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import linaria from '@linaria/vite';
-import inject from '@rollup/plugin-inject';
 import wasm from "vite-plugin-wasm";
+import resolve from "@rollup/plugin-node-resolve";
 
 export default defineConfig({
   plugins: [
@@ -13,7 +13,14 @@ export default defineConfig({
         presets: ['@babel/preset-typescript', '@babel/preset-react'],
       },
     }),
-    // topLevelAwait(),
+    {
+      ...resolve({
+        preferBuiltins: false,
+        browser: true,
+      }),
+      enforce: 'pre',
+      apply: 'build',
+    },
     wasm()
   ],
   optimizeDeps: {
@@ -25,11 +32,6 @@ export default defineConfig({
     exclude: ["@automerge/automerge-wasm"]
   },
   build: {
-    rollupOptions: {
-      plugins: [
-        inject({ Buffer: ['buffer', 'Buffer'] })
-      ]
-    },
     target: ['es2022', 'edge89', 'firefox89', 'chrome89', 'safari15']
   },
   resolve: {
