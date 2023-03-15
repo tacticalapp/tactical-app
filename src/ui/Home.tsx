@@ -8,6 +8,7 @@ import { Text } from './components/Themed';
 import { Dev } from './fragments/dev/Dev';
 import { NotFound } from './fragments/NotFound';
 import { Settings } from './fragments/settings/Settings';
+import { Wallet } from './fragments/wallets/Wallet';
 import { Wallets } from './fragments/wallets/Wallets';
 
 const HomePlacehodler = React.memo(() => {
@@ -57,6 +58,7 @@ export const Home = React.memo(() => {
             <View style={{ flexGrow: 1, flexBasis: 0, flexDirection: 'column', alignItems: 'stretch', backgroundColor: 'var(--theme-bg)' }}>
                 <Routes>
                     <Route path="/" element={<HomePlacehodler />} />
+                    <Route path="/wallets/:address" element={<Wallet />} />
                     <Route path="/wallets" element={<Wallets />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/dev" element={<Dev />} />

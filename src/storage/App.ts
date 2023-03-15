@@ -2,10 +2,12 @@ import * as React from 'react';
 import { tacticalClient } from '../api/client';
 import { TacticalAccountClient } from '../api/TacticalClient';
 import { CloudStorage } from './CloudStorage';
+import { Contacts } from './Contacts';
 import { Events } from './Events';
 import { LiveStorage } from "./LiveStorage";
 import { Logs } from './Logs';
 import { Storage } from "./Storage";
+import { Wallets } from './Wallets';
 
 //
 // App
@@ -30,6 +32,8 @@ export class App {
     readonly live: LiveStorage;
     readonly username: string;
     readonly client: TacticalAccountClient;
+    readonly contacts: Contacts;
+    readonly wallets: Wallets;
 
     constructor(storage: Storage, live: LiveStorage, cloud: CloudStorage, events: Events, client: TacticalAccountClient) {
         this.storage = storage;
@@ -38,17 +42,15 @@ export class App {
         this.client = client;
         this.cloud = cloud;
         this.username = storage.get('account:username') as string;
+        this.contacts = new Contacts(this);
+        this.wallets = new Wallets(this);
     }
 
     async #awaitForData() {
-
-        //
-        // Preload data
-        //
-
-        // await Promise.all([
-        //     this.liveStorage.awaitValue('contacts')
-        // ]);
+        await Promise.all([
+            this.cloud.readValue('live:contacts'),
+            this.cloud.readValue('live:wallets')
+        ]);
     }
 
     destroy() {
