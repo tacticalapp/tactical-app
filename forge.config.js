@@ -4,6 +4,14 @@ module.exports = {
         name: 'Tactical',
         overwrite: true,
         icon: './icons/app',
+        osxSign: {},
+        appBundleId: 'org.tacticalapp.wallet',
+        osxNotarize: {
+            tool: 'notarytool',
+            appleId: process.env.APPLE_ID,
+            appleIdPassword: process.env.APPLE_PASSWORD,
+            teamId: process.env.APPLE_TEAM_ID
+        },
     },
     makers: [
         {
