@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, HIDDevice } from 'electron';
 import path from 'path';
 declare const MAIN_WINDOW_VITE_NAME: string;
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
@@ -48,6 +48,54 @@ const createWindow = (): void => {
     });
     mainWindow.on('ready-to-show', () => {
         mainWindow.show();
+    });
+
+    // WebHID device selection
+    mainWindow.webContents.session.on('select-hid-device', (event, details, callback) => {
+        console.log('select-hid-device', event, details);
+
+        // Opener
+        let opened = false;
+        let devices: HIDDevice[] = details.deviceList;
+        function tryOpen() {
+            if (opened) {
+                return;
+            }
+
+            // Find ledger
+            let ledgers = devices.filter((v) => v.vendorId === 0x2c97);
+            if (ledgers.length > 0) {
+                opened = true;
+                callback(ledgers[0].deviceId);
+            }
+        }
+
+        // Add events to handle devices being added or removed before the callback on
+        //`select-hid-device` is called.
+        mainWindow.webContents.session.on('hid-device-added', (event, device) => {
+            console.log('hid-device-added FIRED WITH', device);
+            devices.push(device.device as any); // Typings error
+            tryOpen();
+        });
+
+        mainWindow.webContents.session.on('hid-device-removed', (event, device) => {
+            console.log('hid-device-removed FIRED WITH', device);
+            //Optionally update details.deviceList
+        });
+
+        // Call with default device
+        event.preventDefault();
+
+        // Ledgers
+        tryOpen();
+    })
+
+    // Permissions
+    mainWindow.webContents.session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
+        return true;
+    });
+    mainWindow.webContents.session.setDevicePermissionHandler((details) => {
+        return true;
     });
 
     // and load the index.html of the app.
