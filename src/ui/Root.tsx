@@ -8,16 +8,19 @@ import {
 import { Home } from './Home';
 import { App, AppContext } from '../storage/App';
 import { RecoilRoot } from 'recoil';
+import { ModalProvider } from './components/Modal';
 
 export const Root = React.memo((props: { app: App, onReset: () => void }) => {
   return (
     <RecoilRoot>
       <AppContext.Provider value={props.app}>
-        <View style={{ width: '100vw', height: '100vh', flexDirection: 'column' }}>
-          <MemoryRouter>
-            <Home />
-          </MemoryRouter>
-        </View>
+        <MemoryRouter>
+          <ModalProvider>
+            <View style={{ width: '100vw', height: '100vh', flexDirection: 'column' }}>
+              <Home />
+            </View>
+          </ModalProvider>
+        </MemoryRouter>
       </AppContext.Provider>
     </RecoilRoot>
   );
