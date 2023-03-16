@@ -6,7 +6,7 @@ const styleNormal = css`
     position: relative;
     border-radius: 8px;
     border: 1px solid transparent;
-    padding: 0.6em 1.2em;
+    padding: 0.1em 0.9em;
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
@@ -14,7 +14,7 @@ const styleNormal = css`
     color: #111111;
     cursor: pointer;
     transition: border-color 0.25s;
-    height: 42px;
+    height: 32px;
     min-width: 64px;
 
     &:hover:not([disabled]) {

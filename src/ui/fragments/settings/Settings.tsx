@@ -8,6 +8,7 @@ import { Button } from '../../components/Button';
 import { Content } from '../../components/Content';
 import { Header } from '../../components/Header';
 import { Section } from '../../components/Section';
+import { Subtitle } from '../../components/Subtitle';
 import { Text } from '../../components/Themed';
 import { Title } from '../../components/Title';
 import { useCommand } from '../../components/useCommand';
@@ -56,7 +57,7 @@ export const Settings = React.memo(() => {
                 </Section>
                 <Section>
                     <Title title="Password" />
-                    <Text style={{ fontSize: 16, opacity: 0.9, marginBottom: 16 }}>Change your account password</Text>
+                    <Subtitle>Change your account password</Subtitle>
                     <span>(coming soon)</span>
                 </Section>
                 <Section>
@@ -68,12 +69,12 @@ export const Settings = React.memo(() => {
                 </Section>
                 <Section>
                     <Title title="Emergency Kit" />
-                    <Text style={{ fontSize: 16, opacity: 0.9, marginBottom: 16 }}>Protect yourself from losing access to your account</Text>
+                    <Subtitle>Protect yourself from losing access to your account</Subtitle>
                     <Button loading={executing} title="Download" onClick={downloadAction} />
                 </Section>
                 <Section>
                     <Title title="Disconnect" />
-                    <Text style={{ fontSize: 16, lineHeight: 20, opacity: 0.9, marginBottom: 16 }}>Disconnecting your account won't delete it, but you will need your username, password and secret key to access it again.</Text>
+                    <Subtitle>Disconnecting your account won't delete it, but you will need your username, password and secret key to access it again.</Subtitle>
                     <Button loading={executingDisconnect} title="Disconnect" onClick={diconnect} />
                 </Section>
             </Content>
