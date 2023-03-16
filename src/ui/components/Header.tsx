@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { Text } from './Themed';
 
-export const Header = React.memo((props: { title: string }) => {
+export const Header = React.memo((props: { title: string, right?: any }) => {
     return (
         <View style={{ flexDirection: 'column', alignItems: 'stretch', alignSelf: 'stretch' }}>
             <View
@@ -18,8 +18,15 @@ export const Header = React.memo((props: { title: string }) => {
                 <Text style={{
                     fontSize: 42,
                     lineHeight: 48,
-                    fontWeight: '500'
+                    fontWeight: '500',
+                    flexGrow: 1,
+                    flexBasis: 0
                 }}>{props.title}</Text>
+                {props.right && (
+                    <View>
+                        {props.right}
+                    </View>
+                )}
             </View>
             <View style={{ height: 1, backgroundColor: 'var(--theme-div)' }} />
         </View>

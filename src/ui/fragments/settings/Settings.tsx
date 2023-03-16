@@ -55,11 +55,11 @@ export const Settings = React.memo(() => {
                     <span>@{username}</span>
                     <Text style={{ fontSize: 16, opacity: 0.6, marginTop: 8 }}>⚠️ Username can't be changed for security reasons</Text>
                 </Section>
-                <Section>
+                {/* <Section>
                     <Title title="Password" />
                     <Subtitle>Change your account password</Subtitle>
                     <span>(coming soon)</span>
-                </Section>
+                </Section> */}
                 <Section>
                     <Title title="Secret Key" />
                     <View style={{ height: 48, justifyContent: 'center', flexDirection: 'column' }}>

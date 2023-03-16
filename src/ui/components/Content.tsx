@@ -9,13 +9,14 @@ export const Content = React.memo((props: { children: React.ReactNode }) => {
                 flexDirection: 'column',
                 flexGrow: 1,
                 flexBasis: 0,
-                paddingHorizontal: 16,
-                paddingVertical: 16,
+                paddingHorizontal: 20,
+                paddingVertical: 20,
             }}
+
             contentContainerStyle={{
                 alignItems: 'flex-start',
-                maxWidth: 600,
-                gap: 36
+                gap: 36,
+                flexGrow: 1
             }}
         >
             {props.children}
