@@ -59,3 +59,8 @@ body {
     color: #747bff;
   }
 }
+
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}

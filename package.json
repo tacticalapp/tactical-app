@@ -31,6 +31,7 @@
     "events": "^3.3.0",
     "framer-motion": "^10.0.1",
     "localforage": "^1.10.0",
+    "normalize.css": "^8.0.1",
     "qrcode": "^1.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -44,6 +45,7 @@
     "ton-crypto": "^3.2.0",
     "ton-ledger": "^3.0.0",
     "tweetnacl": "^1.0.3",
+    "vite-plugin-svgr": "^2.4.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {

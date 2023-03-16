@@ -4,16 +4,24 @@ import { Text } from './Themed';
 
 export const Header = React.memo((props: { title: string }) => {
     return (
-        <View
-            style={{
-                height: 64,
-                backgroundColor: '#191919',
-                alignItems: 'center',
-                flexDirection: 'row',
-                paddingHorizontal: 16
-            }}
-        >
-            <Text style={{ fontSize: 18, lineHeight: 28, fontWeight: '500' }}>{props.title}</Text>
+        <View style={{ flexDirection: 'column', alignItems: 'stretch', alignSelf: 'stretch' }}>
+            <View
+                style={{
+                    height: 110,
+                    backgroundColor: 'var(--theme-bg)',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    paddingTop: 42,
+                    paddingHorizontal: 20
+                }}
+            >
+                <Text style={{
+                    fontSize: 42,
+                    lineHeight: 48,
+                    fontWeight: '500'
+                }}>{props.title}</Text>
+            </View>
+            <View style={{ height: 1, backgroundColor: 'var(--theme-div)' }} />
         </View>
     )
 });
