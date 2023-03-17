@@ -25,7 +25,7 @@ const Items = React.memo(() => {
         <View style={{ gap: 4, flexGrow: 1 }}>
             <NavigationItem icon={iconWallets} title="Wallets" path="/wallets" />
             <NavigationItem icon={iconSettings} title="Settings" path="/settings" />
-            <NavigationItem icon={iconDev} title="Development" path="/dev" />
+            {import.meta.env.DEV && <NavigationItem icon={iconDev} title="Development" path="/dev" />}
         </View>
     );
 });
