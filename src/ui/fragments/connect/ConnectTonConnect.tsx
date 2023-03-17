@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { IStorage } from '@tonconnect/sdk';
 import { View } from 'react-native';
 import { QRCode } from '../../components/qr/QRCode';
 import { Text } from '../../components/Themed';

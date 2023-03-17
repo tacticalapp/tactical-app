@@ -9,6 +9,7 @@ export class TonConnectCreator {
     #storage: TonConnectStorage;
     #connect: TonConnect;
     #completed: boolean;
+    #unsubscribe: () => void;
     onSuccess?: (wallet: {
         address: Address,
         storage: string,
@@ -24,10 +25,11 @@ export class TonConnectCreator {
         this.#storage = new TonConnectStorage();
         this.#connect = new TonConnect({ storage: this.#storage, manifestUrl: 'https://tacticalapp.org/ton-manifest.json' });
         this.#completed = false;
-        this.#connect.onStatusChange((status) => {
+        this.#unsubscribe = this.#connect.onStatusChange((status) => {
 
             if (status && !this.#completed) {
                 this.#completed = true;
+                this.#unsubscribe();
 
                 // Check provider
                 if (status.provider !== 'http') {
@@ -62,6 +64,7 @@ export class TonConnectCreator {
         }, (error) => {
             if (!this.#completed) {
                 this.#completed = true;
+                this.#unsubscribe();
                 if (this.onFail) {
                     this.onFail(error);
                 }
@@ -77,6 +80,9 @@ export class TonConnectCreator {
     }
 
     close() {
-        this.#completed = true;
+        if (!this.#completed) {
+            this.#completed = true;
+            this.#unsubscribe();
+        }
     }
 }

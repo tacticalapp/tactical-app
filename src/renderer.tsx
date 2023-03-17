@@ -7,7 +7,7 @@ import './ui/styles.css';
 import './renderer.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <Boot />
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <Boot />
+  // </React.StrictMode>,
 );

@@ -1821,6 +1821,16 @@
     "@ledgerhq/hw-transport" "^6.28.1"
     "@ledgerhq/logs" "^6.10.1"
 
+"@ledgerhq/hw-transport-webusb@^6.27.12":
+  version "6.27.12"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webusb/-/hw-transport-webusb-6.27.12.tgz#96c9126161664f1c8736f76304309caf46433a7f"
+  integrity sha512-U96UWLZIurD9ifHlm77PAgBbvDCe99DAJk64O2SdR41WRF3WaRq/pjrzCq2UvvammdCd1p7nS4zbhlse0wZplg==
+  dependencies:
+    "@ledgerhq/devices" "^8.0.0"
+    "@ledgerhq/errors" "^6.12.3"
+    "@ledgerhq/hw-transport" "^6.28.1"
+    "@ledgerhq/logs" "^6.10.1"
+
 "@ledgerhq/hw-transport@^6.27.1", "@ledgerhq/hw-transport@^6.28.1":
   version "6.28.1"
   resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-6.28.1.tgz#cb22fe9bc23af4682c30f2aac7fe6f7ab13ed65a"
@@ -2483,7 +2493,21 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@tonconnect/protocol@^2.0.1":
+"@tonconnect/isomorphic-eventsource@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@tonconnect/isomorphic-eventsource/-/isomorphic-eventsource-0.0.1.tgz#199e5a86c31dad706b79826f65879e0d77d3dd51"
+  integrity sha512-ODk48pMlqLSOvu3fM0R1sdlz/Cv2y4hSfwtXmLq9ky9+H7ZQfw/16ElpIJ69B4lUvHycxrueNgrRtF9PJHoGMw==
+  dependencies:
+    eventsource "^2.0.2"
+
+"@tonconnect/isomorphic-fetch@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@tonconnect/isomorphic-fetch/-/isomorphic-fetch-0.0.2.tgz#c09ff05a409ec89262c369d4bf27305820cdaa33"
+  integrity sha512-DAyA4oL7MqbBo9k8+8E+YiWsGCYi6UMhDTcsZjhgzhESkBNG6b+NBkpb1KH4oi0xDZQoknFtY9XogJLuQtSMQQ==
+  dependencies:
+    node-fetch "^2.6.9"
+
+"@tonconnect/protocol@^2.2.5":
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/@tonconnect/protocol/-/protocol-2.2.5.tgz#15369801708354821295a6d284f0267799ac48cc"
   integrity sha512-kR0E+CWZl6JrE/30283v+sRiAvEu21t1xOLFx6f/BxlCNLY2wki39+L32+iicX8gn/Ig99L1flr9TAI9QW9bnQ==
@@ -2491,16 +2515,14 @@
     tweetnacl "^1.0.3"
     tweetnacl-util "^0.15.1"
 
-"@tonconnect/sdk@^2.0.7":
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/@tonconnect/sdk/-/sdk-2.0.7.tgz#e615b0b82e25572c55c054eb715209d7e56fb56c"
-  integrity sha512-MDbA5RhkVbSQQYXsLuVXLATROSQgDJSIx9Y2HIPohfU44PH6vaJ1cBrv9nogIoAQUM2tNuBXC0w+RcFT+eRTCg==
+"@tonconnect/sdk@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@tonconnect/sdk/-/sdk-2.1.0.tgz#0c73a95b54d8a175f8488a969058c259b568c099"
+  integrity sha512-s1LmqmSiTAYkBmlB1rOxy5Hd7JQkz4ja+2Fi70syedkHKVyr8UYtu8HDyUzBZ7qiya+jnWVORrrQv6O8MoEPIA==
   dependencies:
-    "@tonconnect/protocol" "^2.0.1"
-    deepmerge "^4.2.2"
-    eventsource "^2.0.2"
-    node-fetch "^2.6.7"
-    tweetnacl "^1.0.3"
+    "@tonconnect/isomorphic-eventsource" "^0.0.1"
+    "@tonconnect/isomorphic-fetch" "^0.0.2"
+    "@tonconnect/protocol" "^2.2.5"
 
 "@tootallnate/once@2":
   version "2.0.0"
@@ -6495,7 +6517,7 @@ node-fetch@2.6.7:
   dependencies:
     whatwg-url "^5.0.0"
 
-node-fetch@^2.6.7:
+node-fetch@^2.6.7, node-fetch@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.9.tgz#7c7f744b5cc6eb5fd404e0c7a9fec630a55657e6"
   integrity sha512-DJm/CJkZkRjKKj4Zi4BsKVZh3ValV5IR5s7LVZnW+6YMh0W1BfNA8XSs6DLMGYlId5F3KnA70uu2qepcR08Qqg==

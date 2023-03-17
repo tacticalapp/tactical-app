@@ -49,3 +49,14 @@ export async function minDelay<T>(ms: number, execute: () => Promise<T>) {
     }
     return result;
 }
+
+export async function retry<T>(fn: () => Promise<T>): Promise<T> {
+    while(true) {
+        try {
+            return await fn();
+        } catch (e) {
+            console.warn(e);
+            await delay(1000);
+        }
+    }
+}

@@ -36,6 +36,10 @@ export class Wallets {
         return this.#live.use()[0];
     }
 
+    hasWallet(address: string) {
+        return this.#live.get().hasOwnProperty(address);
+    }
+
     registerWallet(address: string, name: string, config: WalletConfig) {
         this.#live.update((data) => {
             data[address] = {
