@@ -5,7 +5,7 @@ import { Button } from '../../components/Button';
 import { Content } from '../../components/Content';
 import { Header } from '../../components/Header';
 
-export const Wallet = React.memo(() => {
+export const AddressFragment = React.memo(() => {
     const app = useApp();
     const address = useParams<{ address: string }>().address!;
     return (
