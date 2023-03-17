@@ -3,7 +3,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { Button } from '../../components/Button';
 import { useModal } from '../../components/Modal';
 import { Text } from '../../components/Themed';
-import { useDevice } from './useDevice';
+import { useDevice } from '../../../connectors/ledger/useDevice';
 
 export const ConnectLedger = React.memo(() => {
     const device = useDevice();
@@ -14,7 +14,7 @@ export const ConnectLedger = React.memo(() => {
             <View style={{ height: 400, width: 400, alignItems: 'center', justifyContent: 'center' }}>
                 <ActivityIndicator />
             </View>
-        )
+        );
     }
 
     if (device.kind === 'error') {
@@ -24,7 +24,7 @@ export const ConnectLedger = React.memo(() => {
                 {device.error === 'user-cancelled' && <Text>Operation canceled. Please, try again.</Text>}
                 <Button title="Cancel" onClick={() => modal.close()} />
             </View>
-        )
+        );
     }
 
     return null;

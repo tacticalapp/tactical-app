@@ -302,9 +302,9 @@ export const Signup = React.memo((props: { onCancel: () => void, onReady: (app: 
                 {(error && error.kind === 'password') ? ('⚠️ ' + error.message) : ''}
             </Text>
             <View style={{ height: 24 }} />
-            <Button title="Create" loading={executing} onClick={execute} />
+            <Button title="Create" size="large" loading={executing} onClick={execute} />
             <View style={{ height: 8 }} />
-            <Button title="Back" kind="ghost" onClick={props.onCancel} />
+            <Button title="Back" size="large" kind="ghost" onClick={props.onCancel} />
         </View>
     );
 });

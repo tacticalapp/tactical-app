@@ -268,9 +268,9 @@ export const Login = React.memo((props: { onCancel: () => void, onReady: (app: A
                     Lost keys? Your funds are <Text style={{ fontWeight: '800' }}>safe</Text>, but you will need to create <Text style={{ fontWeight: '800' }}>a new account</Text>.
                 </Balancer>
             </Text>
-            <Button title="Restore" loading={executing} onClick={restoreCommand} />
+            <Button title="Restore" size="large" loading={executing} onClick={restoreCommand} />
             <View style={{ height: 8 }} />
-            <Button title="Back" kind="ghost" onClick={props.onCancel} />
+            <Button title="Back" size="large" kind="ghost" onClick={props.onCancel} />
         </View>
     )
 });

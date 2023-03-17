@@ -12,6 +12,7 @@ import { AppDraggable } from './ui/components/AppDraggable';
 import { css } from '@linaria/core';
 import { AnimatePresence } from 'framer-motion';
 import { motion } from 'framer-motion';
+import { isMainnet } from './utils/chain';
 
 const SplashScreen = () => (
     <>
@@ -21,6 +22,28 @@ const SplashScreen = () => (
         <AppDraggable />
     </>
 );
+
+const root = css`
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
+`;
+
+const testnetBorder = css`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-width: 4px;
+    border-color: #ba601f;
+    border-style: solid;
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.9;
+`;
 
 const page = css`
     display: flex;
@@ -117,7 +140,7 @@ export const Boot = React.memo(() => {
     }
     return (
         <>
-            <View style={{ width: '100vw', height: '100vh', flexDirection: 'column' }}>
+            <div className={root}>
                 <AnimatePresence initial={false}>
                     {state.mode === 'app'
                         ? (
@@ -139,7 +162,8 @@ export const Boot = React.memo(() => {
                             </motion.div>
                         )}
                 </AnimatePresence>
-            </View>
+                {!isMainnet && (<div className={testnetBorder} />)}
+            </div>
         </>
     )
 });

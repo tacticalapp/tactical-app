@@ -36,8 +36,8 @@ const StartPage = React.memo((props: { onReady: (app: App) => void }) => {
                 >
                     <Text style={{ fontSize: 18, opacity: 0.8, fontWeight: '400', marginTop: 16 }}>Professional tools for TON</Text>
                     <View style={{ flexGrow: 1, width: 336, justifyContent: 'center', alignItems: 'stretch', gap: 16 }}>
-                        <Button title="Create account" onClick={onSignup} />
-                        <Button title="Restore account" onClick={onLogin} />
+                        <Button title="Create account" size="large" onClick={onSignup} />
+                        <Button title="Restore account" size="large" onClick={onLogin} />
                         <Text style={{ fontSize: 14, opacity: 0.8, fontWeight: '400', textAlign: 'center' }}>🔐 We do not have an access <br /> to data in your Tactical account</Text>
                     </View>
                 </motion.div>

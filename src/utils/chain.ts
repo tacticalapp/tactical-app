@@ -1,0 +1,1 @@
+export const isMainnet = (import.meta.env.DEV !== true) || (import.meta.env.VITE_MAINNET === 'true');

@@ -10,7 +10,11 @@ export type WalletsType = {
 
 export type WalletConfig = {
     kind: 'ton-connect',
-    storage: string
+    storage: string,
+    device: {
+        platform: string,
+        appName: string
+    }
 } | {
     kind: 'ledger',
     path: number[],

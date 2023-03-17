@@ -8,6 +8,7 @@ import { Section } from '../../components/Section';
 import { Title } from '../../components/Title';
 import { useCommand } from '../../components/useCommand';
 import { plafrorm } from '../../../utils/platform';
+import { isMainnet } from '../../../utils/chain';
 
 export const Dev = React.memo(() => {
 
@@ -29,6 +30,10 @@ export const Dev = React.memo(() => {
                 <Section>
                     <Title title="Detected Platform" />
                     <span>{plafrorm}</span>
+                </Section>
+                <Section>
+                    <Title title="Environment" />
+                    <span>{isMainnet ? 'Mainnet' : 'Testnet'}</span>
                 </Section>
                 {/* <Section>
                     <Title title="Username" />

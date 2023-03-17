@@ -4,11 +4,11 @@
   "version": "0.2.0",
   "main": ".vite/build/main.js",
   "scripts": {
-    "dev": "vite",
+    "web:dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "jest",
-    "electron:dev": "electron-forge start",
+    "dev": "NODE_ENV=development electron-forge start",
     "electron:make": "electron-forge make",
     "electron:package": "electron-forge package",
     "electron:publish": "electron-forge publish",

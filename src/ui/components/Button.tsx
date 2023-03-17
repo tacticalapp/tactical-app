@@ -22,6 +22,11 @@ const styleNormal = css`
     }
 `;
 
+const styleLarge = css`
+    padding: 0.6em 1.2em;
+    height: 42px;
+`;
+
 const styleGhost = css`
     border: 0px;
     background-color: transparent;
@@ -54,10 +59,16 @@ const loaderStyle = css`
     justify-content: center;
 `;
 
-export const Button = React.memo((props: { kind?: 'normal' | 'ghost' | 'green', title: string, loading?: boolean, onClick: () => void }) => {
+export const Button = React.memo((props: {
+    kind?: 'normal' | 'ghost' | 'green',
+    size?: 'normal' | 'large',
+    title: string,
+    loading?: boolean,
+    onClick: () => void
+}) => {
     let kind = props.kind || 'normal';
     return (
-        <button className={cx(styleNormal, kind === 'ghost' && styleGhost, kind === 'green' && styleGreen)} onClick={props.onClick} disabled={props.loading === true}>
+        <button className={cx(styleNormal, kind === 'ghost' && styleGhost, kind === 'green' && styleGreen, props.size === 'large' && styleLarge)} onClick={props.onClick} disabled={props.loading === true}>
             <span className={cx(props.loading && hiddenStyle)}>{props.title}</span>
             {props.loading && <div className={loaderStyle}><ActivityIndicator color={kind === 'ghost' ? '#dedddd' : '#111111'} /></div>}
         </button>

@@ -97,12 +97,12 @@ export const Backup = React.memo((props: { storage: Storage, password: string, o
             </Text>
 
             <View style={{ height: 48, width: 300, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }}>
-                {emergencyKit && <Button title="Download emergency kit" kind={'green'} onClick={doDownload} />}
+                {emergencyKit && <Button title="Download emergency kit" kind={'green'} size="large" onClick={doDownload} />}
                 {!emergencyKit && <ActivityIndicator color={"white"} />}
             </View>
 
             <View style={{ height: 48, marginTop: 24, width: 300, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }}>
-                <Button title="Complete account creation" kind={'normal'} loading={executing} onClick={executingAction} />
+                <Button title="Complete account creation" kind={'normal'} size="large" loading={executing} onClick={executingAction} />
             </View>
         </View>
     );

@@ -106,8 +106,8 @@ export const Unlock = React.memo((props: { onReady: (app: App) => void, onReset:
                                     blurOnSubmit={false}
                                 />
                             </motion.div>
-                            <Button title="Unlock" loading={unlocking} onClick={unlockCommand} />
-                            <Button kind="ghost" title="Log out" onClick={resetCommand} />
+                            <Button title="Unlock" size="large" loading={unlocking} onClick={unlockCommand} />
+                            <Button kind="ghost" size="large" title="Log out" onClick={resetCommand} />
                         </View>
                     </motion.div>
 
