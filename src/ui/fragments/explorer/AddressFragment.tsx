@@ -6,13 +6,26 @@ import { Content } from '../../components/Content';
 import { Header } from '../../components/Header';
 
 export const AddressFragment = React.memo(() => {
+    
     const app = useApp();
     const address = useParams<{ address: string }>().address!;
+    const wallet = app.wallets.use()[address];
+    const isWallet = !!wallet;
+    const contacts = app.contacts.use()[0];
+    let name: string;
+    if (wallet) {
+        name = wallet.name;
+    } else if (contacts[address]) {
+        name = contacts[address].name;
+    } else {
+        name = address
+    }
+
     return (
         <>
-            <Header title="Wallet" />
+            <Header title={name} right={isWallet ? <Button title="Disconnect" onClick={() => app.wallets.unregisterWallet(address)} /> : undefined} />
             <Content>
-                <Button title="Remove" onClick={() => app.wallets.unregisterWallet(address)} />
+                <span>{address}</span>
             </Content>
         </>
     );
