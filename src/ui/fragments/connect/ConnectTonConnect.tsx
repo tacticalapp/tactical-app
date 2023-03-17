@@ -9,6 +9,7 @@ import { useModal } from '../../components/Modal';
 import { Button } from '../../components/Button';
 import { TonConnectCreator } from '../../../connectors/tonconnect/TonConnectCreator';
 import Balancer from 'react-wrap-balancer';
+import { isMainnet } from '../../../utils/chain';
 
 export const ConnectTonConnect = React.memo(() => {
 
@@ -22,7 +23,7 @@ export const ConnectTonConnect = React.memo(() => {
         connector.onSuccess = (wallet) => {
 
             // Register wallet
-            app.wallets.registerWallet(wallet.address.toString(), 'Tonkeeper #1', {
+            app.wallets.registerWallet(wallet.address.toString({ testOnly: !isMainnet }), 'Mobile Wallet #1', {
                 kind: 'ton-connect',
                 storage: wallet.storage,
                 device: {
