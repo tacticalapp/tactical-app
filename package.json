@@ -13,6 +13,7 @@
     "electron:package": "electron-forge package",
     "electron:publish": "electron-forge publish",
     "icons": "./icons/gen.sh",
+    "make": "electron-forge make --platform=darwin --arch=arm64,x64",
     "release": "electron-forge publish --platform=darwin --arch=arm64,x64"
   },
   "dependencies": {
