@@ -62,7 +62,7 @@ export function useLedgerAction<T>(action: (transport: TonTransport) => Promise<
                             }
                         } catch (e) {
                             if (!(e instanceof LockedDeviceError)) { // Ignore locked device state
-                                if (e instanceof TransportStatusError && (e as any).statusCode === 0x5501) {
+                                if (e instanceof TransportStatusError && ((e as any).statusCode === 0x5501 || (e as any).statusCode === 0x6985)) {
                                     setState({ kind: 'canceled' });
                                     return;
                                 }
@@ -85,7 +85,11 @@ export function useLedgerAction<T>(action: (transport: TonTransport) => Promise<
                         if (exited) {
                             return;
                         }
-                        setState({ kind: 'failed' });
+                        if (e instanceof TransportStatusError && ((e as any).statusCode === 0x5501 || (e as any).statusCode === 0x6985)) {
+                            setState({ kind: 'canceled' });
+                        } else {
+                            setState({ kind: 'failed' });
+                        }
                     }
                     return;
                 } finally {
