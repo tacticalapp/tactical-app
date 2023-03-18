@@ -1,6 +1,16 @@
 import { IStorage } from "@tonconnect/sdk";
 
 export class TonConnectStorage implements IStorage {
+
+    static load(src: string) {
+        let res = new TonConnectStorage();
+        let data = JSON.parse(src);
+        for (let key in data) {
+            res.data.set(key, data[key]);
+        }
+        return res;
+    }
+
     data = new Map<string, string>();
 
     async getItem(key: string): Promise<string | null> {

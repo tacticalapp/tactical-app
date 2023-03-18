@@ -30,8 +30,7 @@ export const SearchFragment = React.memo(() => {
     };
     return (
         <>
-            <Header title="Explorer" />
-            <Content style={{ justifyContent: 'center', paddingBottom: 110 }}>
+            <Content style={{ justifyContent: 'center' }}>
                 <View style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center' }}>
                     <motion.div animate={searchControls}>
                         <TextInput

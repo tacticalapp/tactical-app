@@ -143,7 +143,7 @@ const Stage2Component = React.memo((props: {
     if (action.kind === 'failed') {
         return (
             <View style={{ height: 400, width: 400, gap: 16, alignItems: 'center', justifyContent: 'center' }}>
-                <Text>Unknown error. Please, try again.</Text>
+                <Text style={{ marginBottom: 12 }}>Unknown error. Please, try again.</Text>
                 <Button title="Cancel" onClick={() => modal.close()} />
             </View>
         );
@@ -152,7 +152,7 @@ const Stage2Component = React.memo((props: {
     if (action.kind === 'canceled') {
         return (
             <View style={{ height: 400, width: 400, gap: 16, alignItems: 'center', justifyContent: 'center' }}>
-                <Text>Operation canceled. Please, try again.</Text>
+                <Text style={{ marginBottom: 12 }}>Operation canceled. Please, try again.</Text>
                 <Button title="Cancel" onClick={() => modal.close()} />
             </View>
         );
@@ -195,6 +195,9 @@ const Stage3Component = React.memo((props: { seqno: number, publicKey: Buffer, s
             });
 
             // Close
+            if (!exited) {
+                props.onDone();
+            }
         });
         return () => {
             exited = true;
@@ -250,7 +253,7 @@ export const TransferExecuteLedger = React.memo((props: {
             <Stage1Component
                 from={props.from}
                 to={props.to}
-                onResult={(block, seqno, time, fromDeployed, toDeployed) => {
+                onResult={(block, time, seqno, fromDeployed, toDeployed) => {
                     setStage({ stage: 'second', block, seqno, time, fromDeployed, toDeployed });
                 }}
             />
@@ -291,7 +294,7 @@ export const TransferExecuteLedger = React.memo((props: {
 
     return (
         <View style={{ height: 400, width: 400, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 16, fontWeight: '500', marginTop: 12 }}>
+            <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 12 }}>
                 Transaction successfuly executed!
             </Text>
             <Button title="Close" onClick={() => modal.close(modal.current)} />

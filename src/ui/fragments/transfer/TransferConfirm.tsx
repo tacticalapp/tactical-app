@@ -8,6 +8,7 @@ import { Button } from '../../components/Button';
 import { Section } from '../../components/Section';
 import { useStack } from '../../components/Stack';
 import { Title } from '../../components/Title';
+import { TransferExecuteConnect } from './TransferExecuteConnect';
 import { TransferExecuteLedger } from './TransferExecuteLedger';
 
 export const TransferConfirm = React.memo((props: {
@@ -30,6 +31,16 @@ export const TransferConfirm = React.memo((props: {
     const doNext = React.useCallback(() => {
         if (props.wallet.kind === 'ledger') {
             stack.push(<TransferExecuteLedger
+                wallet={props.wallet}
+                from={props.from}
+                to={props.to}
+                amount={props.amount}
+                stateInit={props.stateInit}
+                payload={props.payload}
+            />);
+        }
+        if (props.wallet.kind === 'ton-connect') {
+            stack.push(<TransferExecuteConnect
                 wallet={props.wallet}
                 from={props.from}
                 to={props.to}

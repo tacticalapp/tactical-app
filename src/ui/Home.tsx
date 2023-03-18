@@ -29,7 +29,7 @@ export const Home = React.memo(() => {
                     <Route path="/" element={<HomePlacehodler />} />
                     <Route path="/wallets" element={<Wallets />} />
                     <Route path="/explorer/:address" element={<AddressFragment />} />
-                    <Route path="/explorer" element={<SearchFragment />} />
+                    <Route path="/search" element={<SearchFragment />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/dev" element={<Dev />} />
                     <Route path="*" element={<NotFound />} />
