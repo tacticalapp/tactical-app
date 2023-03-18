@@ -24,7 +24,7 @@ const createWindow = (): void => {
     const mainWindow = new BrowserWindow({
         height: 800,
         width: 1024,
-        minWidth: 450,
+        minWidth: 1024,
         minHeight: 550,
         titleBarStyle: 'hiddenInset',
         ...(process.platform === 'darwin' ? {

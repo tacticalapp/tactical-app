@@ -32,13 +32,14 @@ export class LiveValue<T extends Object> {
             }
         }, []);
 
-        return [state as T, (updater: Automerge.ChangeFn<T>) => this.update(updater)] as const;
+        return state as T;
     }
 
     update(updater: Automerge.ChangeFn<T>) {
-        let updated = this.value.update(updater);
-        this.live.events.emit('live-key-changed', this.key, this.value.value);
-        this.live.updated(this.key, updated);
+        if (this.value.update(updater)) {
+            this.live.events.emit('live-key-changed', this.key, this.value.value);
+            this.live.updated(this.key, this.value.value);
+        }
     }
 
     apply(remote: AutomergeValue<any>) {

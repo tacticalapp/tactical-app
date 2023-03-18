@@ -4,6 +4,7 @@ import { TacticalAccountClient } from '../api/TacticalClient';
 import { CloudStorage } from './CloudStorage';
 import { Contacts } from './Contacts';
 import { Events } from './Events';
+import { Explorer } from './Explorer';
 import { LiveStorage } from "./LiveStorage";
 import { Logs } from './Logs';
 import { Storage } from "./Storage";
@@ -34,6 +35,7 @@ export class App {
     readonly client: TacticalAccountClient;
     readonly contacts: Contacts;
     readonly wallets: Wallets;
+    readonly explorer: Explorer;
 
     constructor(storage: Storage, live: LiveStorage, cloud: CloudStorage, events: Events, client: TacticalAccountClient) {
         this.storage = storage;
@@ -44,6 +46,7 @@ export class App {
         this.username = storage.get('account:username') as string;
         this.contacts = new Contacts(this);
         this.wallets = new Wallets(this);
+        this.explorer = new Explorer(this);
     }
 
     async #awaitForData() {

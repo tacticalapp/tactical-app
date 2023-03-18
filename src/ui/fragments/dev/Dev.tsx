@@ -13,9 +13,10 @@ import { isMainnet } from '../../../utils/chain';
 export const Dev = React.memo(() => {
 
     const app = useApp();
-    const [counter, updateCounter] = app.live.get<{ counter: any }>('tmp.counter.N@', (d) => {
+    const counterRef = app.live.get<{ counter: any }>('tmp.counter.N@', (d) => {
         d.counter = new Automerge.Counter();
-    }).use();
+    });
+    const counter = counterRef.use();
 
     // const [executing, incrementAction] = useCommand(doIncrement);
 
@@ -25,7 +26,7 @@ export const Dev = React.memo(() => {
             <Content>
                 <Section>
                     <Title title="Increment" />
-                    <Button title={'Value: ' + counter.counter} onClick={() => updateCounter((s) => s.counter.increment())} />
+                    <Button title={'Value: ' + counter.counter} onClick={() => counterRef.update((s) => s.counter.increment())} />
                 </Section>
                 <Section>
                     <Title title="Detected Platform" />

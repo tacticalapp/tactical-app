@@ -33,7 +33,7 @@ export class Wallets {
     }
 
     use() {
-        return this.#live.use()[0];
+        return this.#live.use();
     }
 
     hasWallet(address: string) {

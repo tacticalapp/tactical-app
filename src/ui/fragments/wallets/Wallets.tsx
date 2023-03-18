@@ -13,6 +13,9 @@ import { css } from '@linaria/core';
 import iconLedger from '../../../assets/icon_ledger.svg';
 import iconKeeper from '../../../assets/icon_keeper.svg';
 import { AddressComponent } from '../../components/AddressComponent';
+import { SearchFragment } from '../explorer/SearchFragment';
+import { Section } from '../../components/Section';
+import { Title } from '../../components/Title';
 
 const buttonStyle = css`
     display: flex;

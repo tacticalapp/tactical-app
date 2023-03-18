@@ -22,10 +22,13 @@ export const AddressFragment = React.memo(() => {
     const modal = useModal();
     const address = useParams<{ address: string }>().address!;
     const parsedAddress = Address.parse(address);
+    React.useEffect(() => {
+        app.explorer.visited(parsedAddress.toString({ testOnly: !isMainnet }));
+    }, [address]);
     const data = useAddressInformation(parsedAddress);
     const wallet = app.wallets.use()[address];
     const isWallet = !!wallet;
-    const contacts = app.contacts.use()[0];
+    const contacts = app.contacts.use();
     let name: string;
     if (wallet) {
         name = wallet.name;

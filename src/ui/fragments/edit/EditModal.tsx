@@ -16,7 +16,7 @@ export const EditModal = React.memo((props: { address: Address }) => {
     const modal = useModal();
     const address = props.address.toString({ testOnly: !isMainnet });
     const wallet = app.wallets.use()[address];
-    const contact = app.contacts.use()[0][address];
+    const contact = app.contacts.use()[address];
     let initialName = '';
     if (wallet) {
         initialName = wallet.name;

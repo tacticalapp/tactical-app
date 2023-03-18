@@ -21,8 +21,9 @@ export class AutomergeValue<T> {
     }
 
     update(updater: Automerge.ChangeFn<T>) {
+        let prev = this.#doc;
         this.#doc = Automerge.change(this.#doc, updater);
-        return this.#doc;
+        return !Automerge.equals(prev, this.#doc);
     }
 
     get value() {
