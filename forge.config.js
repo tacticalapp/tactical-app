@@ -3,8 +3,17 @@ module.exports = {
     packagerConfig: {
         name: 'Tactical',
         overwrite: true,
+        asar: true,
         icon: './icons/app',
-        osxSign: {},
+        osxSign: {
+            identity: 'Developer ID Application: Bulka, LLC (466DQWDR8C)',
+            platform: 'darwin',
+            optionsForFile: () => {
+                return {
+                    'hardened-runtime': true
+                };
+            },
+        },
         appBundleId: 'org.tacticalapp.wallet',
         osxNotarize: {
             tool: 'notarytool',
@@ -16,7 +25,9 @@ module.exports = {
             '^/public$',
             '^/src$',
             '^/out$',
-            '^/dist$'
+            '^/dist$',
+            '^/icons$',
+            // '^/node_modules$'
         ]
     },
     makers: [
@@ -27,12 +38,12 @@ module.exports = {
                 description: 'Professional tools for TON',
             }
         },
-        {
-            name: '@electron-forge/maker-zip',
-            platforms: [
-                'darwin'
-            ]
-        },
+        // {
+        //     name: '@electron-forge/maker-zip',
+        //     platforms: [
+        //         'darwin'
+        //     ]
+        // },
         {
             name: '@electron-forge/maker-dmg',
             config: {

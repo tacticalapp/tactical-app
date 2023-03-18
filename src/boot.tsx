@@ -71,6 +71,9 @@ const appPage = css`
 
 async function loadFont(name: string, path: string) {
     console.log('loading font ' + path);
+    if (import.meta.env.PROD) {
+        path = '.' + path;
+    }
     var font = new FontFace(name, `url(${path})`);
     await font.load();
     console.log('font loaded');
