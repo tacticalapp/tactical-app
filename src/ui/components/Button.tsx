@@ -67,8 +67,12 @@ export const Button = React.memo((props: {
     onClick: () => void
 }) => {
     let kind = props.kind || 'normal';
+    let callback = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        props.onClick();
+    }, [props.onClick])
     return (
-        <button className={cx(styleNormal, kind === 'ghost' && styleGhost, kind === 'green' && styleGreen, props.size === 'large' && styleLarge)} onClick={props.onClick} disabled={props.loading === true}>
+        <button className={cx(styleNormal, kind === 'ghost' && styleGhost, kind === 'green' && styleGreen, props.size === 'large' && styleLarge)} onClick={callback} disabled={props.loading === true}>
             <span className={cx(props.loading && hiddenStyle)}>{props.title}</span>
             {props.loading && <div className={loaderStyle}><ActivityIndicator color={kind === 'ghost' ? '#dedddd' : '#111111'} /></div>}
         </button>
