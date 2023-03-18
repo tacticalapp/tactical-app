@@ -4,17 +4,11 @@
   "version": "0.2.0",
   "main": ".vite/build/main.js",
   "scripts": {
-    "web:dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "jest",
     "dev": "NODE_ENV=development electron-forge start",
-    "electron:make": "electron-forge make",
-    "electron:package": "electron-forge package",
-    "electron:publish": "electron-forge publish",
-    "icons": "./icons/gen.sh",
-    "make": "electron-forge make --platform=darwin --arch=arm64,x64",
-    "release": "electron-forge publish --platform=darwin --arch=arm64,x64"
+    "build": "./build.sh",
+    "release": "electron-forge publish --platform=darwin --arch=arm64,x64",
+    "test": "jest",
+    "icons": "./icons/gen.sh"
   },
   "dependencies": {
     "@automerge/automerge": "^2.0.2",

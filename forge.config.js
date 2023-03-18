@@ -1,10 +1,13 @@
 require('dotenv').config();
+const isMainnet = process.env.TACT_ENV === 'mainnet';
+
 module.exports = {
     packagerConfig: {
-        name: 'Tactical',
+        name: isMainnet ? 'Tactical' : 'Tactical Testnet',
+        executableName: 'Tactical',
         overwrite: true,
         asar: true,
-        icon: './icons/app',
+        icon: isMainnet ? './icons/app' : './icons/app_test',
         osxSign: {
             identity: 'Developer ID Application: Bulka, LLC (466DQWDR8C)',
             platform: 'darwin',
@@ -14,7 +17,7 @@ module.exports = {
                 };
             },
         },
-        appBundleId: 'org.tacticalapp.wallet',
+        appBundleId: isMainnet ? 'org.tacticalapp.wallet' : 'org.tacticalapp.wallet.testnet',
         osxNotarize: {
             tool: 'notarytool',
             appleId: process.env.APPLE_ID,
