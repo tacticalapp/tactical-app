@@ -14,7 +14,6 @@ export async function getTonClient() {
         const endpoint = await getHttpV4Endpoint({
             network: isMainnet ? 'mainnet' : 'testnet',
         });
-        console.warn(endpoint);
         client = new TonClient4({ endpoint });
         return client!;
     });
