@@ -48,7 +48,7 @@ const buttonActiveImage = css`
 
 export const SidebarButton = React.memo((props: { icon: any, title: string, active: boolean, onClick: () => void }) => {
     return (
-        <button className={cx(button, props.active && buttonActive)} disabled={props.active} onClick={props.onClick}>
+        <button className={cx(button, props.active && buttonActive)} onClick={props.onClick}>
             <img className={cx(buttonImage, props.active && buttonActiveImage)} src={props.icon} />
             <span className={buttonTitle}>
                 {props.title}
