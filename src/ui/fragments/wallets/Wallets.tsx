@@ -12,6 +12,7 @@ import { Text } from '../../components/Themed';
 import { css } from '@linaria/core';
 import iconLedger from '../../../assets/icon_ledger.svg';
 import iconKeeper from '../../../assets/icon_keeper.svg';
+import { AddressComponent } from '../../components/AddressComponent';
 
 const buttonStyle = css`
     display: flex;
@@ -55,9 +56,9 @@ const WalletButton = React.memo((props: { kind: 'ledger' | 'mobile', address: st
     return (
         <button onClick={doNavigate} className={buttonStyle}>
             <img className={iconClass} src={props.kind === 'ledger' ? iconLedger : iconKeeper} />
-            <View style={{ flexDirection: 'column', flexGrow: 1, flexBasis: 0, paddingLeft: 10, paddingRight: 16, gap: 1 }}>
+            <View style={{ flexDirection: 'column', flexGrow: 1, flexBasis: 0, paddingLeft: 10, paddingRight: 16, gap: 2 }}>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontWeight: '600', fontSize: 15, lineHeight: 20, textAlign: 'left' }}>{props.name}</Text>
-                <Text numberOfLines={1} ellipsizeMode="middle" style={{ fontWeight: '400', fontSize: 13, textAlign: 'left', opacity: 0.4 }}>{props.address}</Text>
+                <AddressComponent address={props.address} style={{ fontWeight: '400', fontSize: 12, opacity: 0.4, textAlign: 'left' }} maxLength={26} />
             </View>
         </button>
     );

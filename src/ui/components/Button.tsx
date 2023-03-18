@@ -44,6 +44,13 @@ const styleGreen = css`
     }
 `;
 
+const styleRed = css`
+    background-color: #f4a9a9;
+    &:hover:not([disabled]) {
+        background-color: #dd7e7e;
+    }
+`;
+
 const hiddenStyle = css`
     opacity: 0;
 `;
@@ -60,7 +67,7 @@ const loaderStyle = css`
 `;
 
 export const Button = React.memo((props: {
-    kind?: 'normal' | 'ghost' | 'green',
+    kind?: 'normal' | 'ghost' | 'green' | 'red',
     size?: 'normal' | 'large',
     title: string,
     loading?: boolean,
@@ -72,7 +79,7 @@ export const Button = React.memo((props: {
         props.onClick();
     }, [props.onClick])
     return (
-        <button className={cx(styleNormal, kind === 'ghost' && styleGhost, kind === 'green' && styleGreen, props.size === 'large' && styleLarge)} onClick={callback} disabled={props.loading === true}>
+        <button className={cx(styleNormal, kind === 'ghost' && styleGhost, kind === 'green' && styleGreen, kind === 'red' && styleRed, props.size === 'large' && styleLarge)} onClick={callback} disabled={props.loading === true}>
             <span className={cx(props.loading && hiddenStyle)}>{props.title}</span>
             {props.loading && <div className={loaderStyle}><ActivityIndicator color={kind === 'ghost' ? '#dedddd' : '#111111'} /></div>}
         </button>

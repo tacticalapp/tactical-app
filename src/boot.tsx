@@ -69,6 +69,24 @@ const appPage = css`
     /* background-color: red; */
 `;
 
+async function loadFont(name: string, path: string) {
+    console.log('loading font ' + path);
+    var font = new FontFace(name, `url(${path})`);
+    await font.load();
+    console.log('font loaded');
+}
+
+async function loadFonts() {
+    await loadFont('MartianMono', '/fonts/MartianMono-Bold.ttf');
+    await loadFont('MartianMono', '/fonts/MartianMono-ExtraBold.ttf');
+    await loadFont('MartianMono', '/fonts/MartianMono-ExtraLight.ttf');
+    await loadFont('MartianMono', '/fonts/MartianMono-Light.ttf');
+    await loadFont('MartianMono', '/fonts/MartianMono-Medium.ttf');
+    await loadFont('MartianMono', '/fonts/MartianMono-Regular.ttf');
+    await loadFont('MartianMono', '/fonts/MartianMono-SemiBold.ttf');
+    await loadFont('MartianMono', '/fonts/MartianMono-Thin.ttf');
+}
+
 export const Boot = React.memo(() => {
 
     let [state, setState] = React.useState<{ mode: 'loading' } | { mode: 'auth' } | { mode: 'unlock' } | { mode: 'app', app: App }>({ mode: 'loading' });
@@ -87,14 +105,15 @@ export const Boot = React.memo(() => {
         let exited = false;
         (async () => {
 
-            // TODO: Load all required fonts
-            await delay(1000);
+            // Load all requirements for the app
+            let [_1, _2, storageExist] = await Promise.all([
+                delay(1000),
+                loadFonts(),
+                Storage.exist()
+            ]);;
 
-            // Check if storage exist
-            let storageExist = await Storage.exist();
 
-            // Set storage
-
+            // Execute
             if (!storageExist) {
                 if (!exited) {
                     setState({ mode: 'auth' });
