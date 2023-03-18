@@ -3,19 +3,14 @@ const isMainnet = process.env.TACT_ENV === 'mainnet';
 
 module.exports = {
     packagerConfig: {
-        name: isMainnet ? 'Tactical' : 'Tactical Testnet',
-        executableName: 'Tactical',
+        name: isMainnet ? 'Tactical' : 'TactTest',
+        executableName: isMainnet ? 'Tactical' : 'TactTest',
         overwrite: true,
         asar: true,
         icon: isMainnet ? './icons/app' : './icons/app_test',
         osxSign: {
             identity: 'Developer ID Application: Bulka, LLC (466DQWDR8C)',
-            platform: 'darwin',
-            optionsForFile: () => {
-                return {
-                    'hardened-runtime': true
-                };
-            },
+            platform: 'darwin'
         },
         appBundleId: isMainnet ? 'org.tacticalapp.wallet' : 'org.tacticalapp.wallet.testnet',
         osxNotarize: {
