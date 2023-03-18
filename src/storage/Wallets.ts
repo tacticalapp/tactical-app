@@ -40,6 +40,17 @@ export class Wallets {
         return this.#live.get().hasOwnProperty(address);
     }
 
+    renameWallet(address: string, name: string) {
+        let normalized = name.trim();
+        if (normalized.length > 0) {
+            this.#live.update((data) => {
+                if (data[address]) {
+                    data[address].name = normalized;
+                }
+            });
+        }
+    }
+
     registerWallet(address: string, name: string, config: WalletConfig) {
         this.#live.update((data) => {
             data[address] = {

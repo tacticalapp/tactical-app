@@ -1,4 +1,4 @@
-import { app, BrowserWindow, HIDDevice } from 'electron';
+import { app, BrowserWindow, HIDDevice, shell } from 'electron';
 import path from 'path';
 declare const MAIN_WINDOW_VITE_NAME: string;
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
@@ -48,6 +48,12 @@ const createWindow = (): void => {
     });
     mainWindow.on('ready-to-show', () => {
         mainWindow.show();
+    });
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        if (url.startsWith('https:')) {
+            shell.openExternal(url);
+        }
+        return { action: 'deny' };
     });
 
     // WebHID device selection

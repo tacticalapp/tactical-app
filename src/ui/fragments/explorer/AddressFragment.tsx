@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import { Address, fromNano } from 'ton-core';
 import { useAddressInformation } from '../../../connectors/ton/useAddressInformation';
 import { useApp } from '../../../storage/App';
+import { isMainnet } from '../../../utils/chain';
+import { openLink } from '../../../utils/openLink';
 import { AddressComponent } from '../../components/AddressComponent';
 import { Button } from '../../components/Button';
 import { Content } from '../../components/Content';
@@ -30,16 +32,34 @@ export const AddressFragment = React.memo(() => {
     } else if (contacts[address]) {
         name = contacts[address].name;
     } else {
-        name = address
+        name = 'TON Address'
     }
 
     // Resolve right button
     let right: any = undefined;
+    let explorerButton = (<Button
+        title="TON Scan"
+        onClick={() => openLink(isMainnet
+            ? 'https://tonscan.org/address/' + address
+            : 'https://testnet.tonscan.org/address/' + address)}
+    />);
+    let editButton = (<Button
+        title="Edit"
+        onClick={() => modal.show(<EditModal address={parsedAddress} />)}
+    />);
     if (isWallet) {
         right = (
             <View style={{ gap: 8, flexDirection: 'row' }}>
                 <Button title="Transfer" kind="green" onClick={() => modal.show(<TransferModal from={parsedAddress} name={name} wallet={wallet.config} />)} />
-                <Button title="Edit" onClick={() => modal.show(<EditModal address={parsedAddress} />)} />
+                {editButton}
+                {explorerButton}
+            </View>
+        );
+    } else {
+        right = (
+            <View style={{ gap: 8, flexDirection: 'row' }}>
+                {editButton}
+                {explorerButton}
             </View>
         );
     }

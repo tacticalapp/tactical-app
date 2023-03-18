@@ -21,11 +21,14 @@ export const Header = React.memo((props: { title: string, right?: any }) => {
                     fontWeight: '500',
                     flexGrow: 1,
                     flexBasis: 0
-                }}>{props.title}</Text>
+                }} numberOfLines={1} >{props.title}</Text>
                 {props.right && (
                     <View>
                         {props.right}
                     </View>
+                )}
+                {!props.right && (
+                    <View style={{ width: 32 }} />
                 )}
             </View>
             <View style={{ height: 1, backgroundColor: 'var(--theme-div)' }} />
