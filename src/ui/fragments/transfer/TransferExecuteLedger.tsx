@@ -108,7 +108,7 @@ const Stage2Component = React.memo((props: {
             timeout: props.time + 60, // 1 minute in seconds
             to: props.to,
             amount: props.amount,
-            sendMode: SendMode.IGNORE_ERRORS || SendMode.PAY_GAS_SEPARATELY,
+            sendMode: SendMode.IGNORE_ERRORS | SendMode.PAY_GAS_SEPARATELY,
             bounce: props.toDeployed && !props.stateInit,
             payload,
         });
