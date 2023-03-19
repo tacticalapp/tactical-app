@@ -2,7 +2,7 @@
   "name": "tactical",
   "description": "Professional tools for TON",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": ".vite/build/main.js",
   "scripts": {
     "dev": "NODE_ENV=development electron-forge start",
