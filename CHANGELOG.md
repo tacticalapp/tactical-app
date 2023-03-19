@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Search and explorer
 - Ability to edit name of a wallet and addresses
 
-## [0.2]
+## [0.2.0]
 
 ## Added
 - Attaching Ledger
