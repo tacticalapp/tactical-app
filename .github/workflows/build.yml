@@ -30,7 +30,7 @@ jobs:
       - name: test
         run: yarn test:ci
   build:
-    # needs: test
+    needs: test
     name: Build (${{ matrix.os }} - ${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     strategy:
