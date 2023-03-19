@@ -272,6 +272,7 @@ export const TransferExecuteLedger = React.memo((props: {
                 seqno={stage.seqno}
                 fromDeployed={stage.fromDeployed}
                 toDeployed={stage.toDeployed}
+                payload={props.payload}
                 onResult={(signedMessage, publicKey, seqno) => {
                     setStage({ stage: 'third', signedMessage, publicKey, seqno });
                 }}
