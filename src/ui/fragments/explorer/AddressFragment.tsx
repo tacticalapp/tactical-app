@@ -56,7 +56,7 @@ export const AddressFragment = React.memo(() => {
     if (isWallet) {
         right = (
             <View style={{ gap: 8, flexDirection: 'row' }}>
-                <Button title="Transfer" kind="green" onClick={() => modal.show(<TransferModal from={parsedAddress} name={name} wallet={wallet.config} />)} />
+                <Button title="Transfer" kind="green" onClick={() => modal.show(<TransferModal from={parsedAddress} />)} />
                 {editButton}
                 {explorerButton}
             </View>
@@ -86,16 +86,16 @@ export const AddressFragment = React.memo(() => {
                             <span>{fromNano(data.account.account.balance.coins)} TON</span>
                         </Section>
                         {data.account.account.state.type !== 'active' && (
-                            <UnknownView message={data.account.account.state.type === 'uninit' ? 'uninitialized' : 'frozen'} />
+                            <UnknownView address={parsedAddress} message={data.account.account.state.type === 'uninit' ? 'uninitialized' : 'frozen'} />
                         )}
                         {data.account.account.state.type === 'active' && !data.resolved && (
-                            <UnknownView message={'Unknown contract'} />
+                            <UnknownView address={parsedAddress} message={'Unknown contract'} />
                         )}
                         {data.resolved && data.resolved.type === 'ton-nominators' && (
-                            <NominatorsView src={data.resolved} />
+                            <NominatorsView address={parsedAddress} src={data.resolved} />
                         )}
                         {data.resolved && data.resolved.type === 'wallet' && (
-                            <WalletView src={data.resolved} />
+                            <WalletView address={parsedAddress} src={data.resolved} />
                         )}
                     </>
                 )}

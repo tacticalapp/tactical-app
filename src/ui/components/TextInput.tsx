@@ -11,7 +11,7 @@ export const TextInput = React.memo((props: TextInputProps) => {
                 paddingVertical: 6,
                 borderWidth: 0,
                 borderRadius: 10,
-                backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                backgroundColor: '#303030',
                 flexShrink: 0
             }, style]}
             placeholderTextColor="rgba(255, 255, 255, 0.3)"

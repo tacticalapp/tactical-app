@@ -58,7 +58,7 @@ export const SearchFragment = React.memo(() => {
                         <Title title="Recent" />
                     )}
                     {recent.last.map((v) => (
-                        <Link to={'/explorer/' + v}><AddressComponent address={v} /></Link>
+                        <Link key={v} to={'/explorer/' + v}><AddressComponent address={v} /></Link>
                     ))}
                 </View>
             </Content>

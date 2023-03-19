@@ -1,12 +1,25 @@
 import * as React from 'react';
-import { fromNano } from 'ton-core';
+import { View } from 'react-native';
+import { Address, fromNano, toNano } from 'ton-core';
 import { NominatorsContract } from '../../../../resolvers/contracts/resolveNominators';
 import { useApp } from '../../../../storage/App';
 import { AddressComponent } from '../../../components/AddressComponent';
+import { Button } from '../../../components/Button';
+import { useModal } from '../../../components/Modal';
 import { Section } from '../../../components/Section';
 import { Title } from '../../../components/Title';
+import { TransferModal } from '../../transfer/TransferModal';
 
-export const NominatorsView = React.memo((props: { src: NominatorsContract }) => {
+export const NominatorsView = React.memo((props: { address: Address, src: NominatorsContract }) => {
+
+    const modal = useModal();
+    const doRequestDeposit = React.useCallback(() => {
+        modal.show(<TransferModal to={props.address} comment="d" />);
+    }, [props.address]);
+    const doRequestWithdraw = React.useCallback(() => {
+        modal.show(<TransferModal to={props.address} amount={toNano(1)} comment="w" />);
+    }, [props.address]);
+
     const app = useApp();
     const wallets = app.wallets.use();
     const contacts = app.contacts.use();
@@ -45,8 +58,19 @@ export const NominatorsView = React.memo((props: { src: NominatorsContract }) =>
                 <span>TON Nominators</span>
             </Section>
             <Section>
+                <Title title="Actions" />
+                <View style={{ flexDirection: 'row', gap: 16 }}>
+                    <Button title="Deposit" kind="green" onClick={doRequestDeposit} />
+                    <Button title="Withdraw" kind="red" onClick={doRequestWithdraw} />
+                </View>
+            </Section>
+            <Section>
                 <Title title="State" />
                 <span>{props.src.state}</span>
+            </Section>
+            <Section>
+                <Title title="LTV" />
+                <span>{fromNano(props.src.tlv)} TON</span>
             </Section>
             {own.map((v) => (
                 <Section key={v.address}>
@@ -93,14 +117,14 @@ export const NominatorsView = React.memo((props: { src: NominatorsContract }) =>
             <Section>
                 <Title title="Nominators" />
                 {other.map((v) => (
-                    <>
+                    <React.Fragment key={v.address}>
                         <AddressComponent address={v.address} />
                         <span>
                             <span>{fromNano(v.balance)} TON</span><span> / </span>
                             <span>{fromNano(v.pendingDeposit)} TON</span><span> / </span>
                             <span>{fromNano(v.pendingWithdraw)} TON</span>
                         </span>
-                    </>
+                    </React.Fragment>
                 ))}
             </Section>
         </>

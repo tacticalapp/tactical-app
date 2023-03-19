@@ -9,6 +9,8 @@ import { Title } from '../../components/Title';
 import { useCommand } from '../../components/useCommand';
 import { plafrorm } from '../../../utils/platform';
 import { isMainnet } from '../../../utils/chain';
+import { Select } from '../../components/Select';
+import { TextInput } from '../../components/TextInput';
 
 export const Dev = React.memo(() => {
 
@@ -17,6 +19,17 @@ export const Dev = React.memo(() => {
         d.counter = new Automerge.Counter();
     });
     const counter = counterRef.use();
+
+    const wallets = app.wallets.use();
+
+    let [selected, setSelected] = React.useState<string | null>(null);
+    const walletOptions = React.useMemo(() => {
+        let options: { label: string, value: string }[] = [];
+        for (let w of Object.keys(wallets)) {
+            options.push({ label: wallets[w].name, value: w });
+        }
+        return options;
+    }, [wallets]);
 
     // const [executing, incrementAction] = useCommand(doIncrement);
 
@@ -35,6 +48,15 @@ export const Dev = React.memo(() => {
                 <Section>
                     <Title title="Environment" />
                     <span>{isMainnet ? 'Mainnet' : 'Testnet'}</span>
+                </Section>
+                <Section>
+                    <Title title="Select" />
+                    <Select
+                        value={selected}
+                        options={walletOptions}
+                        onChange={(e) => setSelected(e)}
+                    />
+                    <TextInput />
                 </Section>
                 {/* <Section>
                     <Title title="Username" />

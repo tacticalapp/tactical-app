@@ -6,6 +6,7 @@ import { ResolveContext } from "../resolveContract";
 export type NominatorsContract = {
     type: 'ton-nominators',
     state: 'idle' | 'sent_stake' | 'validating',
+    tlv: bigint,
     nominatorsCount: number,
     stakeSent: bigint,
     validatorAmount: bigint,
@@ -89,10 +90,12 @@ export async function resolveNominators(ctx: ResolveContext): Promise<Nominators
         let address = new Address(0, bigintToBuffer(addr));
         nominators[address.toString({ testOnly: !isMainnet })].pendingWithdraw = v.pendingWithdraw;
     }
+    const tlv = ctx.contract.balance + stakeSent;
 
     return {
         type: 'ton-nominators',
         state,
+        tlv,
         nominatorsCount,
         stakeSent,
         validatorAmount,

@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { View } from 'react-native';
 import { Address, fromNano } from 'ton-core';
+import { useApp } from '../../../storage/App';
 import { WalletConfig } from '../../../storage/Wallets';
+import { isMainnet } from '../../../utils/chain';
 import { Maybe } from '../../../utils/type';
 import { AddressComponent } from '../../components/AddressComponent';
 import { Button } from '../../components/Button';
 import { Section } from '../../components/Section';
 import { useStack } from '../../components/Stack';
+import { Text } from '../../components/Themed';
 import { Title } from '../../components/Title';
 import { TransferExecuteConnect } from './TransferExecuteConnect';
 import { TransferExecuteLedger } from './TransferExecuteLedger';
@@ -27,6 +30,8 @@ export const TransferConfirm = React.memo((props: {
     }>
 }) => {
 
+    const app = useApp();
+    const contacts = app.contacts.use();
     const stack = useStack();
     const doNext = React.useCallback(() => {
         if (props.wallet.kind === 'ledger') {
@@ -55,8 +60,17 @@ export const TransferConfirm = React.memo((props: {
         <View style={{ height: 400, width: 400, alignItems: 'flex-start', justifyContent: 'center' }}>
             <View style={{ width: 400, gap: 16, marginBottom: 32 }}>
                 <Section>
-                    <Title title={props.name} />
+                    <Title title={'Trasnfer from'} />
+                    <Text style={{ marginBottom: 8 }}>{props.name}</Text>
                     <AddressComponent address={props.from} maxLength={40} />
+                </Section>
+                <Section>
+                    <Title title={'Transfer to'} />
+                    {contacts[props.to.toString({ testOnly: !isMainnet })]
+                        ? (<Text style={{ marginBottom: 8 }}>{contacts[props.to.toString({ testOnly: !isMainnet })].name}</Text>)
+                        : null
+                    }
+                    <AddressComponent address={props.to} maxLength={40} />
                 </Section>
                 <Section>
                     <Title title="Amount" />

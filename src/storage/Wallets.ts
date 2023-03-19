@@ -1,3 +1,5 @@
+import { Address } from "ton-core";
+import { isMainnet } from "../utils/chain";
 import { App } from "./App";
 import { LiveValue } from "./LiveValue";
 
@@ -30,6 +32,15 @@ export class Wallets {
     constructor(app: App) {
         this.app = app;
         this.#live = app.live.get<WalletsType>('wallets');
+    }
+
+    get(address: Address) {
+        let r = this.#live.get()[address.toString({ testOnly: !isMainnet })];
+        if (!r) {
+            return null;
+        } else {
+            return r;
+        }
     }
 
     use() {
