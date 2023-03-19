@@ -1,3 +1,4 @@
+import { isMainnet } from "../utils/chain";
 import { TacticalClient } from "./TacticalClient";
 
-export let tacticalClient = new TacticalClient(import.meta.env.DEV ? 'http://localhost:3001' : 'https://tactical-server.herokuapp.com');
+export let tacticalClient = new TacticalClient(isMainnet ? 'https://tactical-server.herokuapp.com' : 'https://tactical-testnet-server.herokuapp.com');
