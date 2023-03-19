@@ -15,6 +15,9 @@ import { Section } from '../../components/Section';
 import { Title } from '../../components/Title';
 import { EditModal } from '../edit/EditModal';
 import { TransferModal } from '../transfer/TransferModal';
+import { NominatorsView } from './contracts/NominatorsView';
+import { UnknownView } from './contracts/UnknownView';
+import { WalletView } from './contracts/WalletView';
 
 export const AddressFragment = React.memo(() => {
 
@@ -80,8 +83,20 @@ export const AddressFragment = React.memo(() => {
                     <>
                         <Section>
                             <Title title="Balance" />
-                            <span>{fromNano(data.account.balance.coins)} TON</span>
+                            <span>{fromNano(data.account.account.balance.coins)} TON</span>
                         </Section>
+                        {data.account.account.state.type !== 'active' && (
+                            <UnknownView message={data.account.account.state.type === 'uninit' ? 'uninitialized' : 'frozen'} />
+                        )}
+                        {data.account.account.state.type === 'active' && !data.resolved && (
+                            <UnknownView message={'Unknown contract'} />
+                        )}
+                        {data.resolved && data.resolved.type === 'ton-nominators' && (
+                            <NominatorsView src={data.resolved} />
+                        )}
+                        {data.resolved && data.resolved.type === 'wallet' && (
+                            <WalletView src={data.resolved} />
+                        )}
                     </>
                 )}
             </Content>

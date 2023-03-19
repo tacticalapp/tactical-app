@@ -2500,6 +2500,11 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
+"@ton-community/sandbox@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@ton-community/sandbox/-/sandbox-0.6.1.tgz#a60b4aa53ab4200b7eb1bf7760dbd8886ba5cda8"
+  integrity sha512-q9SMSAm0UZkYWQG2SZs3XhI+h1ma3w865P0R6+BG3ZiEkbv2cdjURN3IAdOnlAo1QXbd9UD0rLspXZlpqZHuRw==
+
 "@tonconnect/isomorphic-eventsource@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@tonconnect/isomorphic-eventsource/-/isomorphic-eventsource-0.0.1.tgz#199e5a86c31dad706b79826f65879e0d77d3dd51"
