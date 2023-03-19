@@ -79,6 +79,7 @@
     "icon-gen": "^3.0.1",
     "jest": "^29.4.3",
     "jest-environment-jsdom": "^29.5.0",
+    "mkdirp": "^2.1.5",
     "release-it": "^15.9.0",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",

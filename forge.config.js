@@ -12,7 +12,7 @@ const commonLinuxConfig = {
 module.exports = {
     packagerConfig: {
         name: isMainnet ? 'Tactical' : 'TactTest',
-        executableName: 'tactical',
+        executableName: isMainnet ? 'Tactical' : 'TactTest',
         overwrite: true,
         asar: true,
         icon: isMainnet ? './icons/app' : './icons/app_test',
@@ -56,16 +56,16 @@ module.exports = {
             name: '@electron-forge/maker-dmg',
             config: { format: 'ULFO' }
         },
-        {
-            name: '@electron-forge/maker-deb',
-            platforms: ['linux'],
-            config: commonLinuxConfig,
-        },
-        {
-            name: '@electron-forge/maker-rpm',
-            platforms: ['linux'],
-            config: commonLinuxConfig,
-        },
+        // {
+        //     name: '@electron-forge/maker-deb',
+        //     platforms: ['linux'],
+        //     config: commonLinuxConfig,
+        // },
+        // {
+        //     name: '@electron-forge/maker-rpm',
+        //     platforms: ['linux'],
+        //     config: commonLinuxConfig,
+        // },
     ],
     plugins: [
         {
