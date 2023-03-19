@@ -12,7 +12,7 @@ const commonLinuxConfig = {
 module.exports = {
     packagerConfig: {
         name: isMainnet ? 'Tactical' : 'TactTest',
-        executableName: isMainnet ? 'tactical' : 'tactical-test',
+        executableName: 'tactical',
         overwrite: true,
         asar: true,
         icon: isMainnet ? './icons/app' : './icons/app_test',
