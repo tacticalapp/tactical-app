@@ -1,10 +1,18 @@
 require('dotenv').config();
+const path = require('path');
+
 const isMainnet = process.env.TACT_ENV === 'mainnet';
+const iconDir = path.resolve(__dirname, 'icons');
+const commonLinuxConfig = {
+    icon: {
+        scalable: path.resolve(iconDir, isMainnet ? 'app.svg' : 'app_test.svg'),
+    }
+};
 
 module.exports = {
     packagerConfig: {
         name: isMainnet ? 'Tactical' : 'TactTest',
-        executableName: isMainnet ? 'Tactical' : 'TactTest',
+        executableName: isMainnet ? 'tactical' : 'tactical-test',
         overwrite: true,
         asar: true,
         icon: isMainnet ? './icons/app' : './icons/app_test',
@@ -18,6 +26,10 @@ module.exports = {
             appleId: process.env.APPLE_ID,
             appleIdPassword: process.env.APPLE_ID_PASSWORD,
             teamId: process.env.APPLE_TEAM_ID
+        },
+        win32metadata: {
+            CompanyName: 'Bulka, LLC',
+            OriginalFilename: isMainnet ? 'Tactical' : 'TactTest',
         },
         ignore: [
             '^/public$',
@@ -36,26 +48,24 @@ module.exports = {
                 description: 'Professional tools for TON',
             }
         },
-        // {
-        //     name: '@electron-forge/maker-zip',
-        //     platforms: [
-        //         'darwin'
-        //     ]
-        // },
+        {
+            name: '@electron-forge/maker-zip',
+            platforms: ['darwin']
+        },
         {
             name: '@electron-forge/maker-dmg',
-            config: {
-                format: 'ULFO'
-            }
+            config: { format: 'ULFO' }
         },
         {
             name: '@electron-forge/maker-deb',
-            config: {}
+            platforms: ['linux'],
+            config: commonLinuxConfig,
         },
         {
             name: '@electron-forge/maker-rpm',
-            config: {}
-        }
+            platforms: ['linux'],
+            config: commonLinuxConfig,
+        },
     ],
     plugins: [
         {

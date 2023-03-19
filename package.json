@@ -1,5 +1,6 @@
 {
   "name": "tactical-app",
+  "description": "Professional tools for TON",
   "private": true,
   "version": "0.3.0",
   "main": ".vite/build/main.js",
