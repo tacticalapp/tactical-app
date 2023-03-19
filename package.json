@@ -6,7 +6,7 @@
   "main": ".vite/build/main.js",
   "scripts": {
     "dev": "NODE_ENV=development electron-forge start",
-    "build": "./build.sh",
+    "build": "TACT_ENV=mainnet VITE_MAINNET=true electron-forge make",
     "release": "release-it",
     "test": "jest",
     "test:ci": "jest",
