@@ -77,7 +77,7 @@ jobs:
         run: yarn --network-timeout 100000 || yarn --network-timeout 100000 || yarn --network-timeout 100000
       - name: Make
         if: startsWith(github.ref, 'refs/tags/')
-        run: yarn mkdirp .vite && yarn build --arch=${{ matrix.arch }}
+        run: yarn mkdirp .vite && yarn build --arch=${{ matrix.arch }} && yarn build:testnet --arch=${{ matrix.arch }}
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}

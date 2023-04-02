@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "NODE_ENV=development electron-forge start",
     "build": "TACT_ENV=mainnet VITE_MAINNET=true electron-forge make",
+    "build:testnet": "TACT_ENV=testnet VITE_MAINNET=false electron-forge make",
     "release": "release-it",
     "test": "jest",
     "test:ci": "jest",
